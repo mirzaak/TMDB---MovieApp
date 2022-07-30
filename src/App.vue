@@ -1,8 +1,10 @@
 <template>
+<Navbar/>
   <router-view/>
 </template>
 
 <script setup>
+import Navbar from './components/Navbar.vue'
 import { onMounted } from 'vue';
 import { useDataStore } from "./stores/data";
 const store = useDataStore();
