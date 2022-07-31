@@ -1042,6 +1042,9 @@ for (i = 0; i < acc.length; i++) {
   background: #0d253f;
   color: white;
 }
+.more a:hover img{
+    filter: invert(1);
+}
 .line{
   border-top: 2px solid black;
   padding: 0;
