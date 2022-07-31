@@ -9,10 +9,10 @@
                     <a>Movies</a>
                     <div class="menu">
                         <ul>
-                            <li>Popular</li>
-                            <li>Now Playing</li>
-                            <li>Upcoming</li>
-                            <li>Top Rated</li>
+                            <li><router-link :to="{ name: 'Popular'}">Popular</router-link></li>
+                            <li><router-link :to="{ name: 'Nowplaying'}">Now playing</router-link></li>
+                            <li><router-link :to="{ name: 'Toprated'}">Top Rated</router-link></li>
+                            <li><router-link :to="{ name: 'Upcoming'}">Upcoming</router-link></li>
                         </ul>
                     </div>
 
@@ -89,6 +89,7 @@ ul{
     border-radius: 7px;
     background: white;
     visibility:hidden;
+    z-index: 5;
 
 }
 .menu ul{
@@ -104,6 +105,10 @@ ul{
 }
 .dropdown{
     display: flex;
+}
+.menu a{
+    color: black;
+    font-weight: 400;
 }
 .dropdownItem {
     padding: 20px 10px 20px 10px;

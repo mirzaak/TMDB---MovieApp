@@ -38,7 +38,6 @@ import CircleProgress from "vue3-circle-progress";
 
 import { useDataStore } from "../../stores/data.js";
 
-const props = defineProps(['data'])
 
 const store = useDataStore();
 
