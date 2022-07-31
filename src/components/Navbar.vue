@@ -1,6 +1,7 @@
 <template>
 <nav>
-    <div class="navContent">
+<div class="navWrapper">
+        <div class="navContent">
         <div class="navLeft">
             <router-link to="/"><img class="logo" src="../assets/logo.svg" alt="" width="154"></router-link>
             <ul class="dropdown">
@@ -44,6 +45,7 @@
             </ul>
         </div>
     </div>
+</div>
 </nav>
 <router-view/>
 </template>
@@ -58,14 +60,18 @@ nav{
     height: 64px;
     background: #0d253f;
 }
-.navContent{
+.navWrapper{
     width: 1300px;
+    margin: auto;
+}
+.navContent{
     height: 64px;
     padding: 0 40px;
     margin:auto;
     display: flex;
     align-items: center;
     justify-content: space-between;
+    padding: 0 40px 0 40px;
 }
 .navLeft{
     display: flex;
