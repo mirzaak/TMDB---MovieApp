@@ -1,18 +1,18 @@
 <template>
 <nav>
-<div class="navWrapper">
-        <div class="navContent">
-        <div class="navLeft">
+<div class="navWrapper" ref="nav">
+        <div class="navContent" ref="nav">
+        <div class="navLeft" ref="nav">
             <router-link to="/"><img class="logo" src="../assets/logo.svg" alt="" width="154"></router-link>
             <ul class="dropdown">
                 <li class="dropdownItem">
                     <a>Movies</a>
                     <div class="menu">
                         <ul>
-                            <li><router-link :to="{ name: 'Popular'}">Popular</router-link></li>
-                            <li><router-link :to="{ name: 'Nowplaying'}">Now playing</router-link></li>
-                            <li><router-link :to="{ name: 'Toprated'}">Top Rated</router-link></li>
-                            <li><router-link :to="{ name: 'Upcoming'}">Upcoming</router-link></li>
+                            <router-link :to="{ name: 'Popular'}"><li>Popular</li></router-link>
+                            <router-link :to="{ name: 'Nowplaying'}"><li>Now playing</li></router-link>
+                            <router-link :to="{ name: 'Toprated'}"><li>Top Rated</li></router-link>
+                            <router-link :to="{ name: 'Upcoming'}"><li>Upcoming</li></router-link>
                         </ul>
                     </div>
 
@@ -21,10 +21,10 @@
                     <a>TV Shows</a>
                     <div class="menu">
                         <ul>
-                            <li>Popular</li>
-                            <li>Now Playing</li>
-                            <li>Upcoming</li>
-                            <li>Top Rated</li>
+                            <router-link :to="{ name: 'PopularTV'}"><li>Popular</li></router-link>
+                            <router-link :to="{ name: 'AiringtodayTV'}"><li>Airing Today</li></router-link>
+                            <router-link :to="{ name: 'OnTV'}"><li>On TV</li></router-link>
+                            <router-link :to="{ name: 'TopratedTV'}"><li>Top Rated</li></router-link>
                         </ul>
                     </div>
 
@@ -51,7 +51,19 @@
 </template>
 
 <script setup>
+import { ref } from 'vue'
+const nav = ref()
+window.onscroll = function() {scrollFunction()};
 
+function scrollFunction() {
+  if (document.documentElement.scrollTop > 64) {
+    nav.value.style.top = "-64px"
+
+  } else {
+    nav.value.style.top = "0px ";
+
+  }
+}
 </script>
 
 <style scoped>
@@ -61,10 +73,16 @@ nav{
     background: #0d253f;
 }
 .navWrapper{
-    width: 1300px;
+    width: 100%;
+    height: 64px;
+    background: #0d253f;
     margin: auto;
+    position: fixed;
+    z-index: 5;
+    transition: 0.5s;
 }
 .navContent{
+    width: 1300px;
     height: 64px;
     padding: 0 40px;
     margin:auto;

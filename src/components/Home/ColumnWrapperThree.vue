@@ -63,6 +63,9 @@ onMounted(() => {
   width: 1300px;
   margin: auto;
   margin-top: 20px;
+    background-image: url(http://localhost:8081/img/back.5a94e8fd.svg);
+    background-repeat: repeat-x;
+    background-position: bottom;
 }
 .columnHeader{
   height: 30px;

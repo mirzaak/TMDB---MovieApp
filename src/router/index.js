@@ -5,6 +5,11 @@ import Nowplaying from '../views/movies/now_playing.vue'
 import Toprated from '../views/movies/top_rated.vue'
 import Upcoming from '../views/movies/upcoming.vue'
 
+import PopularTV from '../views/tv/popular.vue'
+import AiringtodayTV from '../views/tv/airing_today.vue'
+import OnTV from '../views/tv/on_tv.vue'
+import TopratedTV from '../views/tv/top_rated.vue'
+
 const routes = [
   {
     path: '/',
@@ -35,6 +40,26 @@ const routes = [
     path: '/upcoming',
     name: 'Upcoming',
     component: Upcoming
+  },
+  {
+    path: '/tv/popular',
+    name: 'PopularTV',
+    component: PopularTV
+  },
+  {
+    path: '/tv/airing_today',
+    name: 'AiringtodayTV',
+    component: AiringtodayTV
+  },
+  {
+    path: '/tv/on_tv',
+    name: 'OnTV',
+    component: OnTV
+  },
+  {
+    path: '/tv/top_rated',
+    name: 'TopratedTV',
+    component: TopratedTV
   },
 
 ]
