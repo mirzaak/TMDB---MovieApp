@@ -1,4 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import { useUserStore } from "../stores/user.js";
+
 import Home from '../views/Home.vue'
 import Popular from '../views/movies/popular.vue'
 import Nowplaying from '../views/movies/now_playing.vue'
@@ -9,6 +11,8 @@ import PopularTV from '../views/tv/popular.vue'
 import AiringtodayTV from '../views/tv/airing_today.vue'
 import OnTV from '../views/tv/on_tv.vue'
 import TopratedTV from '../views/tv/top_rated.vue'
+
+import Login from '../views/Login.vue'
 
 const routes = [
   {
@@ -61,6 +65,11 @@ const routes = [
     name: 'TopratedTV',
     component: TopratedTV
   },
+  {
+    path: '/login',
+    name: 'Login',
+    component: Login
+  },
 
 ]
 
@@ -68,5 +77,11 @@ const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes
 })
-
+router.beforeEach(async(to, from) => {
+const store = useUserStore()
+  if(store.sesija && to.name == 'Login'){
+    return { name: 'Home' }
+  } 
+  
+})
 export default router

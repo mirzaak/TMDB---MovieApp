@@ -39,8 +39,19 @@
         </div>
         <div class="navRight">
             <ul class="dropdown">
-                <li class="dropdownItem"><a>Login</a></li>
-                <li class="dropdownItem"><a href="https://www.themoviedb.org/signup">Join TMDB</a></li>
+                <li class="dropdownItem" v-if="!store.sesija">
+                    <router-link :to="{ name: 'Login'}"><li>Login</li></router-link>
+                </li>
+                <li v-if="store.sesija" class="dropdownItem">
+                    <a>{{store.username}}</a>
+                    <div class="menu">
+                        <ul>
+                            <router-link  @click="logOut()" :to="{ name: 'Home'}"><li>Log Out</li></router-link>
+                        </ul>
+                    </div>
+
+                </li>
+                <li v-if="!store.sesija" class="dropdownItem"><a href="https://www.themoviedb.org/signup">Join TMDB</a></li>
                 <li class="search"><img src="../assets/search.svg" alt="" width="30"></li>
             </ul>
         </div>
@@ -52,7 +63,11 @@
 
 <script setup>
 import { ref } from 'vue'
+import { useUserStore } from "../stores/user.js";
+
+const store = useUserStore();
 const nav = ref()
+
 window.onscroll = function() {scrollFunction()};
 
 function scrollFunction() {
@@ -61,8 +76,14 @@ function scrollFunction() {
 
   } else {
     nav.value.style.top = "0px ";
-
   }
+}
+
+const logOut = () => {
+    store.username = null;
+    store.sesija = null;
+    localStorage.removeItem('username');
+    localStorage.removeItem('sesija');
 }
 </script>
 
@@ -123,6 +144,7 @@ ul{
 }
 .dropdown{
     display: flex;
+    align-items: center;
 }
 .menu a{
     color: black;

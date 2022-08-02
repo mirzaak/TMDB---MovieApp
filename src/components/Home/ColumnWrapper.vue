@@ -5,10 +5,10 @@
     <div class="pill">
       <div class="selector">
         <div class="selected" ref="selected"></div>
-        <h3><a :class="{selectedPill:headerSelect === 'merged'}" @click="store.mergeData();select('0','135px','merged')">Streaming</a></h3>
-        <h3><a :class="{selectedPill:headerSelect == 'popular'}" @click="store.getData('tv', 'popular');select('120px','115px','popular')">On TV</a></h3>
-        <h3><a :class="{selectedPill:headerSelect == 'nowplaying'}" @click="store.getData('movie', 'now_playing');select('225px','120px','nowplaying')">For Rent</a></h3>
-        <h3><a :class="{selectedPill:headerSelect == 'upcoming'}" @click="store.getData('movie', 'upcoming');select('340px','145px','upcoming')">In Theatres</a></h3>
+        <h3><a :class="{selectedPill:headerSelect === 'merged'}" @click="store.mergeData();select('0','130px','merged')">Streaming</a></h3>
+        <h3><a :class="{selectedPill:headerSelect == 'popular'}" @click="store.getData('tv', 'popular');select('110px','115px','popular')">On TV</a></h3>
+        <h3><a :class="{selectedPill:headerSelect == 'nowplaying'}" @click="store.getData('movie', 'now_playing');select('205px','120px','nowplaying')">For Rent</a></h3>
+        <h3><a :class="{selectedPill:headerSelect == 'upcoming'}" @click="store.getData('movie', 'upcoming');select('310px','145px','upcoming')">In Theatres</a></h3>
       </div>
     </div>
   </div>
@@ -177,8 +177,8 @@ onMounted(() => {
 }
 .selected{ 
   background: #0d253f;
-  width: 135px;
-  height: 30px;
+  width: 130px;
+  height: 32px;
   border-radius: 30px;
   position: absolute;
   transition: left 0.5s;

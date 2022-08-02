@@ -6,7 +6,7 @@
       <div class="selector">
         <div class="selected" ref="selected"></div>
         <h3><a :class="{selectedPill:headerSelect === 'movie'}" @click="store.getDataTwo('movie', 'popular');select('0','107px','movie')">Movies</a></h3>
-        <h3><a :class="{selectedPill:headerSelect == 'tv'}" @click="store.getDataTwo('tv', 'popular');select('103px','67px','tv')">TV</a></h3>
+        <h3><a :class="{selectedPill:headerSelect == 'tv'}" @click="store.getDataTwo('tv', 'popular');select('90px','67px','tv')">TV</a></h3>
       </div>
     </div>
   </div>
@@ -168,7 +168,7 @@ onMounted(() => {
 .selected{ 
   background: #0d253f;
   width: 107px;
-  height: 30px;
+  height: 32px;
   border-radius: 30px;
   position: absolute;
   transition: left 0.5s;

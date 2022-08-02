@@ -7,7 +7,7 @@
         <h2>Millions of movies, TV Shows and people to discover. Explore Now.</h2>
         <span class="search">
           <label for="search"></label>
-          <input type="text">
+          <input type="text" placeholder="Search for a movie, tv show, person...">
         </span>
   </div>
 </div>
@@ -72,8 +72,11 @@ onMounted(() => {
   height: 30px;
   border-radius: 30px;
   padding: 10px;
+  padding-left: 20px;
   margin-top: 30px;
   border: none;
+  outline: none;
+  font-size: 1em;
 }
 .trailers{
   width: 1300px;

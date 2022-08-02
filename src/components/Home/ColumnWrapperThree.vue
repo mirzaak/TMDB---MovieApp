@@ -6,7 +6,7 @@
       <div class="selector">
         <div class="selected" ref="selected"></div>
         <h3><a :class="{selectedPill:headerSelect === 'today'}" @click="store.getDataThree('tv', 'airing_today');select('0','96px','today')">Today</a></h3>
-        <h3><a :class="{selectedPill:headerSelect == 'thisweek'}" @click="store.getDataThree('movie', 'upcoming');select('91px','135px','thisweek')">This Week</a></h3>
+        <h3><a :class="{selectedPill:headerSelect == 'thisweek'}" @click="store.getDataThree('movie', 'upcoming');select('85px','130px','thisweek')">This Week</a></h3>
       </div>
     </div>
   </div>
@@ -172,7 +172,7 @@ onMounted(() => {
 .selected{ 
   background: #0d253f;
   width: 96px;
-  height: 30px;
+  height: 32px;
   border-radius: 30px;
   position: absolute;
   transition: left 0.5s;
