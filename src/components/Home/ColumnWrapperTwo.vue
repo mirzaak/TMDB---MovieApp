@@ -14,7 +14,7 @@
     <div class="movieWrapper">
     <div class="movie" v-for="index in dataTwo" :key="index">
       <div class="movieCard">
-        <img :src=" store.img + 'w154' + index.poster_path" alt="" width="154" height="231">
+        <img :src=" store.img + 'w154' + index.poster_path" alt="" width="154" height="231" @click="toMovie(index)">
           <span class="movieInfo">
             <span class="progressBar"><circle-progress :border-width="3" :border-bg-width="9" :percent="index.vote_average * 10" fill-color="#90cea1" empty-color="none" background="#081c22" :size="40" /><p>{{index.vote_average * 10}}%</p></span>
             <h2 index.name><a href="#">{{index.name}}</a></h2>
@@ -36,6 +36,14 @@ import CircleProgress from "vue3-circle-progress";
 
 import { useDataStore } from "../../stores/data.js";
 
+import { useRouter, useRoute } from 'vue-router'
+    
+const route = useRoute()
+
+const router = useRouter()
+
+const id = route.params.id
+
 const store = useDataStore();
 
 const movies = ref()
@@ -53,6 +61,13 @@ headerSelect.value = type
 const dataTwo = computed(() => {
   return store.dataTwo
 })
+const toMovie = (index) => {
+      if(index.type==='movie'){
+        router.push({ name: 'Moviedetails', params: { id: index.id }})    
+      }else if(index.type=='tv'){
+        console.log('tv')
+      }
+}
 onMounted(() => {
   store.getDataTwo('movie', 'popular');
 })
@@ -61,7 +76,7 @@ onMounted(() => {
 .columnWrapper{
   width: 1300px;
   margin: auto;
-  margin-top: 20px;
+  margin-top: 30px;
 }
 .columnHeader{
   height: 30px;

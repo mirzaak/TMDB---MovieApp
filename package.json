@@ -13,6 +13,7 @@
     "pinia": "^2.0.17",
     "vue": "^3.2.13",
     "vue-router": "^4.0.3",
+    "vue-star-rating": "^2.1.0",
     "vue3-circle-progress": "^1.0.7"
   },
   "devDependencies": {

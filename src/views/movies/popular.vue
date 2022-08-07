@@ -164,13 +164,22 @@
     <div class="movies" v-if="popular">
         <div class="movie"  v-for="(movie) in popular.results" :key="movie">
             <img class="morebutton" ref="morebutton" @click="more(movie)" src="../../assets/cirlceDots.svg" alt="">
-            <div class="more" :class="{activeMore:movie.active}">
+
+            <div v-if="!storeUser.sesija" class="more" :class="{activeMore:movie.active}">
                 <p>Want to rate or add this item to a list?</p>
                 <a @click="toLogin()">Login<img src="../../assets/strelica.svg" alt=""></a>
             <div class="line"></div>
             <p>Not a member?</p>
             <a href="https://www.themoviedb.org/signup">Sign up and join the community<img src="../../assets/strelica.svg" alt=""></a>
             </div>
+
+            <div v-if="storeUser.sesija" class="more" :class="{activeMore:movie.active}">
+                <a class="moreWithSession">Add To List</a>
+                <a>Favourite</a>
+                <a>Watchlist</a>
+                <a>Your Rating</a>
+            </div>
+
             <div class="moreback" >
                 <img v-if="movie.poster_path" class="movieposter" :src="store.img + 'w154' + movie.poster_path" alt="" @click="toMovie(movie.id)" width="154">
                 <img v-if="!movie.poster_path" class="movieposter" src="../../assets/noImage.svg" alt="" @click="toMovie(movie.id)" width="154">
@@ -206,6 +215,10 @@ import axios from 'axios'
 import { useDataStore } from "../../stores/data.js";
 
 import $ from "jquery";
+
+import { useUserStore } from "../../stores/user.js";
+
+const storeUser = useUserStore();
 
 const store = useDataStore();
   const route = useRoute()
