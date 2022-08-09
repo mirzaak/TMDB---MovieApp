@@ -1,18 +1,15 @@
 <template>
-
-<div class="media">
-<div class="video" @click="overlayToggle">
-<img v-if="media.key" :src="preVideo + media.key + postVideo" alt="" >
-<div class="play" v-if="media.key">
+<div class="media" v-for="video in media" :key="video">
+<div class="video" @click="overlayToggle(video.key)">
+<img :src="preVideo + video.key + postVideo" alt="" >
+<div class="play">
     <img src="../../assets/play.svg" alt="" >
 </div>
 </div>
-<img v-if="images" class="backdrop" :src="slika + 'w780' + images" alt="" width="780">
-<img v-if="poster" class="poster" :src="slika + 'w342' + poster" alt="" width="200">
 </div>
-<div class="overlay" v-if="overlayOn" @click="overlayToggle">
+<div class="overlay" v-if="overlayOn" @click="overlayToggle()">
 <div class="overlayVideo">
-<iframe v-if="media.key" width="1200" height="800" :src="video + media.key" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<iframe v-if="spicifiedVideo" width="1200" height="800" :src="'https://www.youtube.com/embed/' + spicifiedVideo" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 </div>
 </div>
 </template>
@@ -22,52 +19,42 @@
 import { ref } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import axios from 'axios'
+
     const media = ref([])
-    const images = ref()
+    const mediaTwo = ref([])
+    const mediaThree = ref([])
+    const mediaFour = ref([])
+    const mediaFive = ref([])
+    const mediaSix = ref([])
+    const images = ref([])
     const route = useRoute()
     const id = route.params.id
     const preVideo = ref('http://i.ytimg.com/vi/')
     const postVideo = ref('/hqdefault.jpg')
-    const slika = ref('https://image.tmdb.org/t/p/')
-    const poster = ref()
+    const slika = ref('https://image.tmdb.org/t/p/original/')
+    const poster = ref([])
     const video = ref('https://www.youtube.com/embed/')
     const overlayOn = ref(false)
+    const spicifiedVideo = ref()
     const loadVideos = async() => {
         try{
-            let videosData = await axios.get('https://api.themoviedb.org/3/movie/'+ id +'/videos?api_key=0b5e8ce7494ae54d6c643adf4db40da7&language=en-US')
-            media.value = await videosData.data.results[0]
-            media.value.length = 1
+            let videosData = await axios.get('https://api.themoviedb.org/3/tv/'+ id +'/videos?api_key=0b5e8ce7494ae54d6c643adf4db40da7&language=en-US')
+            media.value = await videosData.data.results
+            console.log(media.value,'media')
+
         }
         catch(err){}
-        console.log(media.value,'aadxasdasd')
+        console.log(mediaTwo.value,'aadxasdasd')
     }
 
-    const loadImages = async() => {
-        try{
-            let imagesData = await axios.get('https://api.themoviedb.org/3/movie/'+ id +'/images?api_key=0b5e8ce7494ae54d6c643adf4db40da7&language=en-US&include_image_language=en%2Cnull')
-            images.value = await imagesData.data.backdrops[0].file_path
 
-        }   
-        catch(err){}
-        console.log(images.value)
-    }
-
-    const loadPosters = async() => {
-        try{
-            let imagesData = await axios.get('https://api.themoviedb.org/3/movie/'+ id +'/images?api_key=0b5e8ce7494ae54d6c643adf4db40da7&language=en-US&include_image_language=en%2Cnull')
-            poster.value = await imagesData.data.posters[0].file_path
-        }   
-        catch(err){}
-        console.log(poster.value)
-    }
-
-    const overlayToggle = () => {
+    const overlayToggle = (key) => {
         overlayOn.value = !overlayOn.value
+        spicifiedVideo.value = key
+   
     }
 
-loadImages()
-loadVideos()
-loadPosters()
+    loadVideos()
 </script>
 
 <style scoped>
@@ -83,7 +70,6 @@ loadPosters()
     align-items: center;
     justify-content: center;
     height: 300px;
-
 }
 .play{
     width: 67px;

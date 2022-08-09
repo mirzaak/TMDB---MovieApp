@@ -1,32 +1,32 @@
 <template>
 <div class="header" v-if="data">
         <span><div class="overview"><a>Overview</a> <div class="arrow"></div></div><div class="headerDropdown">
-            <router-link :to="{ name: 'Moviedetails', params: { id: id }}">Main</router-link>
-            <router-link :to="{ name: 'AlternativeTitles', params: { id: id }}">Alternative Titles</router-link>
-            <router-link :to="{ name: 'CastAndCrew', params: { id: id }}">Cast & Crew</router-link>
-            <router-link :to="{ name: 'ReleaseDates', params: { id: id }}">Release Dates</router-link>
-            <router-link :to="{ name: 'Translations', params: { id: id }}">Translations</router-link>
-            <a :href="'https://www.themoviedb.org/movie/'+id+'/changes'">Changes</a>
+            <router-link :to="{ name: 'Tvdetails', params: { id: id }}">Main</router-link>
+            <router-link :to="{ name: 'AlternativeTitlesTv', params: { id: id }}">Alternative Titles</router-link>
+            <router-link :to="{ name: 'CastAndCrewTv', params: { id: id }}">Cast & Crew</router-link>
+            <router-link :to="{ name: 'Seasons', params: { id: id }}">Seasons</router-link>
+            <router-link :to="{ name: 'TranslationsTv', params: { id: id }}">Translations</router-link>
+            <a :href="'https://www.themoviedb.org/tv/'+id+'/changes'">Changes</a>
             </div></span>
         <span><div>Media <div class="arrow"></div></div><div class="headerDropdown">
-            <router-link :to="{ name: 'Backdrops', params: { id: id }}">Backdrops</router-link>
-            <router-link :to="{ name: 'Logos', params: { id: id }}">Logos</router-link>
-            <router-link :to="{ name: 'Posters', params: { id: id }}">Posters</router-link>
-            <router-link :to="{ name: 'MediaVideos', params: { id: id }}">Videos</router-link>
+            <router-link :to="{ name: 'BackdropsTv', params: { id: id }}">Backdrops</router-link>
+            <router-link :to="{ name: 'LogosTv', params: { id: id }}">Logos</router-link>
+            <router-link :to="{ name: 'PostersTv', params: { id: id }}">Posters</router-link>
+            <router-link :to="{ name: 'MediaVideosTv', params: { id: id }}">Videos</router-link>
             </div></span>
         <span><div>Fandom <div class="arrow"></div></div><div class="headerDropdown">
-            <a :href="'https://www.themoviedb.org/movie/'+id+'/discuss'">Discussions</a>
-            <router-link :to="{ name: 'Reviews', params: { id: id }}">Reviews</router-link>
+            <a :href="'https://www.themoviedb.org/tv/'+id+'/discuss'">Discussions</a>
+            <router-link :to="{ name: 'ReviewsTv', params: { id: id }}">Reviews</router-link>
             </div></span>
         <span><div>Share <div class="arrow"></div></div><div class="headerDropdown">
             <a @click="overlayToggle">Share Link</a>
             <a :href="'https://www.facebook.com/'+external.facebook_id">Facebook</a>
-            <a :href="'https://twitter.com/'+external.facebook_id">Tweet</a>
+            <a :href="'https://twitter.com/'+external.twitter_id">Tweet</a>
             </div></span>
 </div>
 <div class="overlay" v-if="overlayOn" @click.self="overlayToggle">
 <div class="overlayVideo">
-    <a>Share {{data.original_title}}</a>
+    <a>Share {{data.original_name}}</a>
     <p>URL</p>
     <input type="text" :value="urlNow">
 </div>
@@ -65,8 +65,8 @@
         </div>
         <div class="right">
             <div class="rightup">
-                <span class="rednaslova"><h1 v-if="data.title">{{ data.title }}</h1><h1 v-if="data.release_date" class="hajedan"> ({{ data.release_date }})</h1></span>
-                <span class="rednaslovaDrugired"><a v-if="data.release_date">{{data.release_date}}</a><div v-if="data.release_date" class="dot"></div><span class="redzanrova" v-for="genre in data.genres" :key="genre"><a v-if="genre.name">{{genre.name}}</a></span><div v-if="data.runtime" class="dot"></div><a v-if="data.runtime">{{data.runtime}}min</a></span>
+                <span class="rednaslova"><h1 v-if="data.original_name">{{ data.original_name }}</h1><h1 v-if="data.first_air_date" class="hajedan"> ({{ data.first_air_date }})</h1></span>
+                <span class="rednaslovaDrugired"><a v-if="data.first_air_date">{{data.first_air_date}}</a><div v-if="data.first_air_date" class="dot"></div><span class="redzanrova" v-for="genre in data.genres" :key="genre"><a v-if="genre.name">{{genre.name}}</a></span><div v-if="data.runtime" class="dot"></div><a v-if="data.runtime">{{data.runtime}}min</a></span>
             </div>
             <div class="rightdown">
 
@@ -116,7 +116,7 @@
                         </div>
                         <div v-if="data.id && store.sesija" class="fourButtons">
                             <div class="smallCircle addToList" @click="addList()">
-                                    <div class="circleTooltip" >
+                                    <div class="circleTooltip">
                                     <a>Add to list</a>
                                     <div class="tip"></div>
                                 </div>
@@ -145,7 +145,7 @@
                                     
                                 </div>
                                 <img src="../assets/star.svg" alt="" v-if="!movieRating"><img v-if="movieRating" src="../assets/rated.svg" alt="">
-                                <div v-if="toggleRating"  class="stars" id="stars" ><img @click="removeRate(movie,'movie')" src="../assets/rateMinus.svg" alt=""><star-rating @click="postRate()" :border-width="2" :increment="1" :star-size="20" :show-rating="false" v-model:rating="movieRating" :max-rating="10"></star-rating></div>
+                                <div v-if="toggleRating"  class="stars" id="stars" ><img @click="removeRate(movie,'tv')" src="../assets/rateMinus.svg" alt=""><star-rating @click="postRate()" :border-width="2" :increment="1" :star-size="20" :show-rating="false" v-model:rating="movieRating" :max-rating="10"></star-rating></div>
                             </div>
                         </div>
 
@@ -210,9 +210,27 @@
                 </div>
             
         <a class="cANDc" @click="toCast">Full Cast & Crew</a>
+
+        <div class="seasonSection">
+            <div class="seasonHeader"><h1>Current Season</h1></div>
+            <div class="season">
+                <div class="slika"><img :src="slika + zadnjaSlika" alt="" @click="toSeason"></div>
+                <div class="info">
+                    <div class="prviRed">
+                    <h2><a @click="toSeason">{{zadnjaNaslov}}</a></h2>
+                    <p>{{zadnjaDate}} | {{zadnjaEpisodes}} Episodes</p>
+                    </div>
+                    <div class="infoOverview">
+                        <p>{{zadnjaOverview}}</p>
+                    </div>
+                </div>
+            </div>
+            <router-link :to="{ name: 'Seasons', params: { id: id }}"><a>View All Seasons</a></router-link>
+        </div>
+
         <div class="reviewsection" v-if="review">
             <div class="reviews">
-                <span class="reviewheader"><h1>Social</h1><router-link :to="{ name: 'Reviews', params: { id: id }}"><a>Reviews</a></router-link><a :href="'https://www.themoviedb.org/movie/'+id+'/discuss'">Discussions</a></span>
+                <span class="reviewheader"><h1>Social</h1><router-link :to="{ name: 'Reviews', params: { id: id }}"><a>Reviews</a></router-link><a :href="'https://www.themoviedb.org/tv/'+id+'/discuss'">Discussions</a></span>
                 <div class="review">
                 <div class="reviewcard">
                 <span class="reviewPrviRed"><img v-if="revjuSlika" :src="revjuSlika" alt=""><img v-if="!revjuSlika" src="../assets/gravatar.svg" alt=""><img v-if="!revjuSlika.toString().includes('https://www.gravatar.com/avatar/')" :src="'https://www.gravatar.com/avatar/'+revjuSlika" alt=""><div class="reviewProstor" ></div>
@@ -238,12 +256,12 @@
         </div>
         <div class="fade"></div>
         </div>
-        <div class="recommendationssection">
-            <div class="recommendationHeader"><h1>Recommendations</h1></div>
+        <div class="recommendationssection" v-if="!recommendations.length === 0">
+            <div class="recommendationHeader" ><h1>Recommendations</h1></div>
             <div class="recommendationWrapper">
             <div class="recommendation" v-for="predlozeno in recommendations" :key="predlozeno">
                 <img @click="toMovie(predlozeno.id)" v-if="predlozeno.backdrop_path" :src="slikaBackdrop + predlozeno.backdrop_path" alt=""><div v-if="!predlozeno.backdrop_path" class="noRecommendationImg"><a>No Image</a></div>
-                <a  @click="toMovie(predlozeno.id)">{{predlozeno.original_title}}</a>
+                <a  @click="toMovie(predlozeno.id)">{{predlozeno.original_name}}</a>
             </div>
         </div>
         <div class="fade"></div>    
@@ -286,10 +304,10 @@ import { ref, shallowRef } from 'vue'
 import "vue3-circle-progress/dist/circle-progress.css";
 import CircleProgress from "vue3-circle-progress";
 import { useUserStore } from "../stores/user.js";
-import Mostpopular from '../components/Details/Mostpopular.vue'
-import Videos from '../components/Details/Videos.vue'
-import Backdrops from '../components/Details/Backdrops.vue'
-import Posters from '../components/Details/Posters.vue'
+import Mostpopular from '../components/DetailsTv/Mostpopular.vue'
+import Videos from '../components/DetailsTv/Videos.vue'
+import Backdrops from '../components/DetailsTv/Backdrops.vue'
+import Posters from '../components/DetailsTv/Posters.vue'
     const store = useUserStore();
     const router = useRouter()
     const route = useRoute()
@@ -338,17 +356,26 @@ import Posters from '../components/Details/Posters.vue'
     const ratedMovies = ref([])
     const ratedTV = ref([])
 
+    const season = ref()
+    const sezone = ref()
+    const zadnjaSlika = ref()
+    const zadnjaNaslov = ref()
+    const zadnjaDate = ref()
+    const zadnjaOverview = ref()
+    const zadnjaEpisodes = ref()
+    const videosTrailer = ref()
+
     const movieRating = ref()
-    const toggleLists = ref(false)
-    
+
     const toggleRating = ref(false)
+    const toggleLists = ref(false)
 
     const loadRateData = async() => {
-      let wMoviesData = await axios.get('https://api.themoviedb.org/3/account/{account_id}/watchlist/movies?api_key=0b5e8ce7494ae54d6c643adf4db40da7&language=en-US&session_id='+store.sesija+'&sort_by=created_at.asc&page=1')
+      let wMoviesData = await axios.get('https://api.themoviedb.org/3/account/{account_id}/watchlist/tv?api_key=0b5e8ce7494ae54d6c643adf4db40da7&language=en-US&session_id='+store.sesija+'&sort_by=created_at.asc&page=1')
       let wTVData = await axios.get('https://api.themoviedb.org/3/account/{account_id}/watchlist/tv?api_key=0b5e8ce7494ae54d6c643adf4db40da7&language=en-US&session_id='+store.sesija+'&sort_by=created_at.asc&page=1')
-      let favMoviesData = await axios.get('https://api.themoviedb.org/3/account/{account_id}/favorite/movies?api_key=0b5e8ce7494ae54d6c643adf4db40da7&session_id='+store.sesija+'&language=en-US&sort_by=created_at.asc&page=1')
+      let favMoviesData = await axios.get('https://api.themoviedb.org/3/account/{account_id}/favorite/tv?api_key=0b5e8ce7494ae54d6c643adf4db40da7&session_id='+store.sesija+'&language=en-US&sort_by=created_at.asc&page=1')
       let favTVData = await axios.get('https://api.themoviedb.org/3/account/{account_id}/favorite/tv?api_key=0b5e8ce7494ae54d6c643adf4db40da7&session_id='+store.sesija+'&language=en-US&sort_by=created_at.asc&page=1')
-      let rMoviesData = await axios.get('https://api.themoviedb.org/3/account/{account_id}/rated/movies?api_key=0b5e8ce7494ae54d6c643adf4db40da7&language=en-US&session_id='+store.sesija+'&sort_by=created_at.asc&page=1')
+      let rMoviesData = await axios.get('https://api.themoviedb.org/3/account/{account_id}/rated/tv?api_key=0b5e8ce7494ae54d6c643adf4db40da7&language=en-US&session_id='+store.sesija+'&sort_by=created_at.asc&page=1')
       let rTVData = await axios.get('https://api.themoviedb.org/3/account/{account_id}/rated/tv?api_key=0b5e8ce7494ae54d6c643adf4db40da7&language=en-US&session_id='+store.sesija+'&sort_by=created_at.asc&page=1')
         wMovies.value = await wMoviesData.data.results
         wTV.value = await wTVData.data.results
@@ -408,7 +435,7 @@ import Posters from '../components/Details/Posters.vue'
     }
     const loadData = async() => {
     try{
-      let movieData = await axios.get('https://api.themoviedb.org/3/movie/'+ id +'?api_key=0b5e8ce7494ae54d6c643adf4db40da7&language=en-US&append_to_response=reviews,keywords')
+      let movieData = await axios.get('https://api.themoviedb.org/3/tv/'+ id +'?api_key=0b5e8ce7494ae54d6c643adf4db40da7&language=en-US&append_to_response=reviews,keywords')
       data.value = await movieData.data
       averageVote.value = await movieData.data.vote_average.toString().substring(2,0) * 10
       poster.value = await movieData.data.poster_path
@@ -418,9 +445,23 @@ import Posters from '../components/Details/Posters.vue'
     }
     catch(err){}
     }
+        const loadSeason = async() => {
+    try{
+      let movieData = await axios.get('https://api.themoviedb.org/3/tv/'+ id +'?api_key=0b5e8ce7494ae54d6c643adf4db40da7&language=en-US&append_to_response=reviews')
+      season.value = await movieData.data
+      sezone.value = await movieData.data.seasons
+      zadnjaSlika.value = await sezone.value[sezone.value.length-1].poster_path
+      zadnjaNaslov.value = await sezone.value[sezone.value.length-1].name
+      zadnjaDate.value = await sezone.value[sezone.value.length-1].air_date
+      zadnjaOverview.value = await sezone.value[sezone.value.length-1].overview
+      zadnjaEpisodes.value = await sezone.value[sezone.value.length-1].episode_count
+    console.log(data.value,'sezone')
+    }
+    catch(err){}
+    }
     const loadReview = async() => {
     try{
-      let reviewData = await axios.get('https://api.themoviedb.org/3/movie/'+ id +'?api_key=0b5e8ce7494ae54d6c643adf4db40da7&language=en-US&append_to_response=reviews')
+      let reviewData = await axios.get('https://api.themoviedb.org/3/tv/'+ id +'?api_key=0b5e8ce7494ae54d6c643adf4db40da7&language=en-US&append_to_response=reviews')
       review.value = await reviewData.data.reviews.results[0]
       details.value = await reviewData.data.reviews.results[0].author_details
       revjuSlika.value = await reviewData.data.reviews.results[0].author_details.avatar_path.substring(1)
@@ -432,7 +473,7 @@ import Posters from '../components/Details/Posters.vue'
 
     const loadCredits = async() => {
         try{
-            let creditsData = await axios.get('https://api.themoviedb.org/3/movie/'+ id +'/credits?api_key=0b5e8ce7494ae54d6c643adf4db40da7&language=en-US')
+            let creditsData = await axios.get('https://api.themoviedb.org/3/tv/'+ id +'/credits?api_key=0b5e8ce7494ae54d6c643adf4db40da7&language=en-US')
             credits.value = await creditsData.data.cast
             credits.value.length = 8
         }
@@ -441,7 +482,7 @@ import Posters from '../components/Details/Posters.vue'
     }
     const loadFourCredits = async() => {
         try{
-            let creditsAData = await axios.get('https://api.themoviedb.org/3/movie/'+ id +'/credits?api_key=0b5e8ce7494ae54d6c643adf4db40da7&language=en-US')
+            let creditsAData = await axios.get('https://api.themoviedb.org/3/tv/'+ id +'/credits?api_key=0b5e8ce7494ae54d6c643adf4db40da7&language=en-US')
             fourCredits.value = await creditsAData.data.cast
             fourCredits.value.length = 4
         }
@@ -451,7 +492,7 @@ import Posters from '../components/Details/Posters.vue'
 
     const loadImages = async() => {
         try{
-            let imagesData = await axios.get('https://api.themoviedb.org/3/movie/'+ id +'/images?api_key=0b5e8ce7494ae54d6c643adf4db40da7&language=en-US&include_image_language=en%2Cnull')
+            let imagesData = await axios.get('https://api.themoviedb.org/3/tv/'+ id +'/images?api_key=0b5e8ce7494ae54d6c643adf4db40da7&language=en-US&include_image_language=en%2Cnull')
             images.value = await imagesData.data
         }   
         catch(err){}
@@ -459,15 +500,16 @@ import Posters from '../components/Details/Posters.vue'
     }
     const loadRecommendations = async() => {
         try{
-            let recommendationsData = await axios.get('https://api.themoviedb.org/3/movie/'+ id +'/recommendations?api_key=0b5e8ce7494ae54d6c643adf4db40da7&language=en-US&page=1')
+            let recommendationsData = await axios.get('https://api.themoviedb.org/3/tv/'+ id +'/recommendations?api_key=0b5e8ce7494ae54d6c643adf4db40da7&language=en-US&page=1')
             recommendations.value = await recommendationsData.data.results
+            console.log(recommendations.value,'recommendationnnnnnnnnnnnnnnnnnnnnnnn')
         }   
         catch(err){}
         console.log(recommendations.value)
     }
     const loadExternal = async() => {
         try{
-            let recommendationsData = await axios.get('https://api.themoviedb.org/3/movie/'+ id +'/external_ids?api_key=0b5e8ce7494ae54d6c643adf4db40da7')
+            let recommendationsData = await axios.get('https://api.themoviedb.org/3/tv/'+ id +'/external_ids?api_key=0b5e8ce7494ae54d6c643adf4db40da7')
             external.value = await recommendationsData.data
         }   
         catch(err){}
@@ -475,7 +517,7 @@ import Posters from '../components/Details/Posters.vue'
     }
     const loadVideos = async() => {
         try{
-            let recommendationsData = await axios.get('https://api.themoviedb.org/3/movie/'+ id +'/videos?api_key=0b5e8ce7494ae54d6c643adf4db40da7&language=en-US')
+            let recommendationsData = await axios.get('https://api.themoviedb.org/3/tv/'+ id +'/videos?api_key=0b5e8ce7494ae54d6c643adf4db40da7&language=en-US')
             trailer.value = await recommendationsData.data.results[0].key
         }   
         catch(err){}
@@ -489,7 +531,7 @@ import Posters from '../components/Details/Posters.vue'
         router.push({ name: 'CastAndCrew', params: { id: id }})  
     }
     const toMovie = (movieId) => {
-        window.location.href="http://localhost:8080/movie/" + movieId
+        window.location.href="http://localhost:8080/tv/" + movieId
     }
     const postFav =(id) => {
 try{    
@@ -499,7 +541,7 @@ if(favouriteMovies.value.includes(id)){
     favouriteMovies.value.splice(i,1)
     console.log(favouriteMovies.value)
 axios.post('https://api.themoviedb.org/3/account/{account_id}/favorite?api_key=0b5e8ce7494ae54d6c643adf4db40da7&session_id='+store.sesija, {
-  "media_type": "movie",
+  "media_type": "tv",
   "media_id": data.value.id,
   "favorite": false
   })
@@ -507,7 +549,7 @@ axios.post('https://api.themoviedb.org/3/account/{account_id}/favorite?api_key=0
 }else{
         favouriteMovies.value.push(id)
     axios.post('https://api.themoviedb.org/3/account/{account_id}/favorite?api_key=0b5e8ce7494ae54d6c643adf4db40da7&session_id='+store.sesija, {
-  "media_type": "movie",
+  "media_type": "tv",
   "media_id": data.value.id,
   "favorite": true
   })
@@ -518,13 +560,15 @@ axios.post('https://api.themoviedb.org/3/account/{account_id}/favorite?api_key=0
     catch(err){}
 
     }
-
+    const toSeason = () => {
+        router.push({ name: 'Seasons', params: { id: id }}) 
+    }
     const postWatchlist =(id) => {   
       let i = watchlistMovies.value.indexOf(id)
 if(watchlistMovies.value.includes(id)){
 watchlistMovies.value.splice(i,1)
 axios.post('https://api.themoviedb.org/3/account/{account_id}/watchlist?api_key=0b5e8ce7494ae54d6c643adf4db40da7&session_id='+store.sesija, {
-  "media_type": "movie",
+  "media_type": "tv",
   "media_id": id,
   "watchlist": false
   })
@@ -532,7 +576,7 @@ axios.post('https://api.themoviedb.org/3/account/{account_id}/watchlist?api_key=
 }else{
         watchlistMovies.value.push(id)
     axios.post('https://api.themoviedb.org/3/account/{account_id}/watchlist?api_key=0b5e8ce7494ae54d6c643adf4db40da7&session_id='+store.sesija, {
-  "media_type": "movie",
+  "media_type": "tv",
   "media_id": id,
   "watchlist": true
   })
@@ -541,7 +585,7 @@ axios.post('https://api.themoviedb.org/3/account/{account_id}/watchlist?api_key=
     } 
 
     const postRate = async() => {
- await axios.post('https://api.themoviedb.org/3/movie/'+data.value.id+'/rating?api_key=0b5e8ce7494ae54d6c643adf4db40da7&session_id='+store.sesija, {
+ await axios.post('https://api.themoviedb.org/3/tv/'+data.value.id+'/rating?api_key=0b5e8ce7494ae54d6c643adf4db40da7&session_id='+store.sesija, {
   "value": movieRating.value,
 
   })
@@ -562,7 +606,7 @@ var container = $(".toggleRating");
 }
     const removeRate = async() => {
  movieRating.value = 0
- await axios.delete('https://api.themoviedb.org/3/movie/'+data.value.id+'/rating?api_key=0b5e8ce7494ae54d6c643adf4db40da7&session_id='+store.sesija,)
+ await axios.delete('https://api.themoviedb.org/3/tv/'+data.value.id+'/rating?api_key=0b5e8ce7494ae54d6c643adf4db40da7&session_id='+store.sesija,)
 
     }
     const addList =() => {
@@ -586,6 +630,7 @@ loadReview()
 loadFourCredits()
 loadExternal()
 loadVideos()
+loadSeason()
 if(store.sesija){
     loadRateData()
 }
@@ -908,7 +953,6 @@ if(store.sesija){
     margin-top: 20px;
     padding-top: 20px;
     padding-bottom: 20px;
-    border-top: 1px solid lightgray;
     border-bottom: 1px solid lightgray;
 }
 .reviewsection a{
@@ -916,9 +960,9 @@ if(store.sesija){
     text-decoration: none;
 }
 .mediasection{
+    margin-top: 10px;
     padding-top: 20px;
     padding-bottom: 20px;
-    border-top: 1px solid lightgray;
     border-bottom: 1px solid lightgray;
     position: relative;
     height: 380px;
@@ -1428,6 +1472,66 @@ if(store.sesija){
     height: 20px;
     margin-right: 10px;
 }
+.seasonSection{
+    width: 100%;
+    height: 300px;
+    display: flex;
+    border-top: 1px solid lightgray;
+    border-bottom: 1px solid lightgray;
+    flex-direction: column;
+    margin-top: 20px;
+}
+.seasonSection a{
+    text-decoration: none;
+    color:black;
+    cursor:pointer;
+    margin-bottom: 10px;
+}
+.season{
+    height: 220px;
+    width: 100%;
+    border: 1px solid lightgray;
+    display: flex;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    overflow: hidden;
+}
+.seasonHeader{
+    height: 40px;
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+.seasonHeader h1{
+    font-size: 1.4em;
+    margin-right: 10px;
+    cursor: pointer;
+}
+.seasonHeader p{
+    margin: 0;
+}
+.prviRed a{
+    cursor:pointer;
+}
+.info{
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    padding: 20px;
+}
+.info h2{
+    margin: 0;
+}
+.info p{
+    margin: 0;
+    margin-top: 10px;
+}
+.slika img{
+    height: 100%;
+    border-top-left-radius: 10px;
+    cursor: pointer;
+}
 .lists a{
     color: white;
     font-weight: bold;
@@ -1447,4 +1551,5 @@ if(store.sesija){
     justify-content: center;
     cursor: auto;
 }
+
 </style>

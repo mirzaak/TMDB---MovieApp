@@ -163,14 +163,27 @@
 <div class="right" ref="right">
     <div class="movies" v-if="popular">
         <div class="movie"  v-for="(movie) in popular.results" :key="movie">
-            <img class="morebutton" ref="morebutton" @click="more(movie)" src="../../assets/cirlceDots.svg" alt="">
-            <div class="more" :class="{activeMore:movie.active}">
+            <img v-if="!storeUser.sesija" class="morebutton" ref="morebutton" @click="more(movie)" src="../../assets/cirlceDots.svg" alt="">
+
+            <div v-if="!storeUser.sesija" class="more" :class="{activeMore:movie.active}">
                 <p>Want to rate or add this item to a list?</p>
                 <a @click="toLogin()">Login<img src="../../assets/strelica.svg" alt=""></a>
             <div class="line"></div>
             <p>Not a member?</p>
             <a href="https://www.themoviedb.org/signup">Sign up and join the community<img src="../../assets/strelica.svg" alt=""></a>
             </div>
+
+            <img v-if="storeUser.sesija" class="morebutton" ref="morebutton" @click="moreSession(movie)" src="../../assets/cirlceDots.svg" alt="">
+
+            <div v-if="storeUser.sesija" class=" moreWithSession" :class="{activeMore:movie.active}">
+                <a @click="addList()"><img class="icon" src="../../assets/list.svg" alt="">Add To List</a>
+                <div v-if="toggleLists" class="lists"><a href="https://www.themoviedb.org/list/new">+ Create New List</a></div>
+                <a  @click="postFav(movie.id)"><img class="icon" src="../../assets/heart.svg" alt="" v-if="!fMoviesIds.includes(movie.id)"><img class="icon" v-if="fMoviesIds.includes(movie.id)" src="../../assets/favorite.svg" alt="">Favourite</a>
+                <a @click="postWatchlist(movie.id)"><img class="icon" src="../../assets/bookmark.svg" alt="" v-if="!wMoviesIds.includes(movie.id)"><img img class="icon" v-if="wMoviesIds.includes(movie.id)" src="../../assets/watchlist.svg" alt="">Watchlist</a>
+                <a @click="rate(movie)"><img class="icon" src="../../assets/star.svg" alt="" v-if="!movieRating"><img v-if="movieRating" src="../../assets/rated.svg" alt="">Your Rating</a>
+                <div v-if="movie.rate"  class="stars" id="stars" ><img class="removeRate" @click="removeRate(movie,'movie')" src="../../assets/rateMinus.svg" alt=""><star-rating @click="postRate(movie)" :border-width="2" :increment="1" :star-size="20" :show-rating="false" v-model:rating="movie.rating" :max-rating="10"></star-rating></div>
+            </div>
+
             <div class="moreback" >
                 <img v-if="movie.poster_path" class="movieposter" :src="store.img + 'w154' + movie.poster_path" alt="" @click="toMovie(movie.id)" width="154">
                 <img v-if="!movie.poster_path" class="movieposter" src="../../assets/noImage.svg" alt="" @click="toMovie(movie.id)" width="154">
@@ -193,6 +206,11 @@
 </template>
 
 <script setup>
+import "vue3-circle-progress/dist/circle-progress.css";
+
+
+import StarRating from 'vue-star-rating'
+
 import { useRouter, useRoute } from 'vue-router'
 
 import {ref, onMounted, onUnmounted} from 'vue';
@@ -206,6 +224,10 @@ import axios from 'axios'
 import { useDataStore } from "../../stores/data.js";
 
 import $ from "jquery";
+
+import { useUserStore } from "../../stores/user.js";
+
+const storeUser = useUserStore();
 
 const store = useDataStore();
   const route = useRoute()
@@ -243,7 +265,35 @@ const store = useDataStore();
   const stickyActive = ref(false)
   const stickyRef = ref(null)
   const submitButton = ref(null)
+  const movieRating = ref()
+  const toggleRating = ref(false)
+  const toggleLists = ref(false)
 
+    const otherData = ref([])
+
+    const wMovies = ref([])
+    const wTV = ref([])
+    const favMovies = ref([])
+    const favTV = ref([])
+    const rMovies = ref([])
+    const rTV = ref([])
+    const averageMRateFinal = ref()
+    const averageTRateFinal = ref()
+
+    const ratedTVs = ref([])
+    const averageMRate = ref([])
+    const averageTRate = ref([])
+    const rejtedMovies= ref([])
+    const watchlistMovies = ref([])
+    const watchlistTV = ref([])
+    const favouriteMovies = ref([])
+    const favouriteTV = ref([])
+    const ratedMovies = ref([])
+    const wMoviesIds = ref([])
+
+    const ratedTV = ref([])
+    const movieLength = ref([])
+     const fMoviesIds = ref([])
   const toggleSubmitBlue = () => {
           submitBlue.value = true
           window.addEventListener("scroll", handleSticky)
@@ -257,7 +307,60 @@ const store = useDataStore();
     }
     catch(err){}
   }
+    const loadOtherData = async() => {
 
+      let movieData = await axios.get('https://api.themoviedb.org/3/account/{account_id}/watchlist/movies?api_key=0b5e8ce7494ae54d6c643adf4db40da7&language=en-US&session_id='+storeUser.sesija+'&page=1')
+      let tvData = await axios.get('https://api.themoviedb.org/3/account/{account_id}/watchlist/tv?api_key=0b5e8ce7494ae54d6c643adf4db40da7&language=en-US&session_id='+storeUser.sesija+'&page=1')
+      let favMoviesData = await axios.get('https://api.themoviedb.org/3/account/{account_id}/favorite/movies?api_key=0b5e8ce7494ae54d6c643adf4db40da7&session_id='+storeUser.sesija+'&language=en-US&page=1')
+      let favTvData = await axios.get('https://api.themoviedb.org/3/account/{account_id}/favorite/tv?api_key=0b5e8ce7494ae54d6c643adf4db40da7&session_id='+storeUser.sesija+'&language=en-US&&page=1')
+      let rMovies = await axios.get('https://api.themoviedb.org/3/account/{account_id}/rated/movies?api_key=0b5e8ce7494ae54d6c643adf4db40da7&language=en-US&session_id='+storeUser.sesija+'&page=1')
+      let rTVs = await axios.get('https://api.themoviedb.org/3/account/{account_id}/rated/tv?api_key=0b5e8ce7494ae54d6c643adf4db40da7&language=en-US&session_id='+storeUser.sesija+'&page=1')
+      ratedMovies.value = rMovies.data.results
+      watchlistMovies.value = movieData.data.results
+     otherData.value = await movieData.data.results
+        movieLength.value = await movieData.data.results.length
+        favouriteMovies.value = await favMoviesData.data.results
+
+    for(let i = 0; ratedMovies.value.length > i ; i++){
+
+        averageMRate.value.push(ratedMovies.value[i].rating)
+        console.log(averageMRate.value,'sum')
+    }
+
+        averageMRate.value = averageMRate.value.reduce((a, b) => a + b, 0)
+        averageMRate.value = averageMRate.value / ratedMovies.value.length
+        averageMRate.value = averageMRate.value * 10
+        averageMRate.value = Math.round(averageMRate.value)
+        averageMRateFinal.value = averageMRate.value
+
+    for(let i = 0; ratedTVs.value.length > i ; i++){
+
+        averageTRate.value.push(ratedTVs.value[i].rating)
+    }
+
+        averageTRate.value = averageTRate.value.reduce((a, b) => a + b, 0)
+        averageTRate.value = averageTRate.value / ratedTVs.value.length
+        averageTRate.value = averageTRate.value * 10
+        averageTRate.value = Math.round(averageTRate.value)
+        averageTRateFinal.value = averageTRate.value
+
+
+    console.log(rejtedMovies.value,'aaaaaaaaaaaaaaaaaaaaaaaa')
+    for(let i = 0; favouriteMovies.value.length > i; i++){
+        fMoviesIds.value.push(favouriteMovies.value[i].id)
+
+
+    }
+    for(let i = 0; watchlistMovies.value.length > i; i++){
+        wMoviesIds.value.push(watchlistMovies.value[i].id)
+
+
+    }
+for(let i = 0;otherData.value.length>i;i++){
+otherData.value[i].rating = 0
+}
+
+    }
   const loadMore = async() => {
     try{
 
@@ -376,6 +479,22 @@ for (i = 0; i < acc.length; i++) {
     }
 });
     }
+ const moreSession = (movie) => {
+      for(let i = 0;i < popular.value.results.length;i++){
+      if(popular.value.results[i].active = true){
+          popular.value.results[i].active = false}
+    }
+    movie.active = true
+    $(document).mouseup(function(e) 
+{
+    var container = $(".moreWithSession");
+
+    if (!container.is(e.target) && container.has(e.target).length === 0) 
+    {
+      movie.active = false
+    }
+});
+    }
 
 
   const loadGenres = async() => {
@@ -428,12 +547,121 @@ for (i = 0; i < acc.length; i++) {
   const toLogin = () => {
         router.push({ name: 'Login'}) 
   }
+    const rate =async(movie) => {
+for(let i = 0;otherData.value.length>i;i++){
+otherData.value[i].rate = false
+}
+movie.rate = true
+$(document).mouseup(function(e) 
+{
+    var container = $(".stars");
+
+    if (!container.is(e.target) && container.has(e.target).length === 0) 
+    {
+        movie.rate = false
+    }
+});
+      let rMovies = await axios.get('https://api.themoviedb.org/3/account/{account_id}/rated/movies?api_key=0b5e8ce7494ae54d6c643adf4db40da7&language=en-US&session_id='+storeUser.sesija+'&page=1')
+    ratedMovies.value = await rMovies.data.results
+for(let i = 0 ; ratedMovies.value.length > i ;i++){
+    if(movie.id == ratedMovies.value[i].id){
+        console.log(ratedMovies.value[i])
+        movie.rating = ratedMovies.value[i].rating
 
 
+    }
+}
+
+    }
+
+    const postRate = async(movie) => {
+ await axios.post('https://api.themoviedb.org/3/movie/'+movie.id+'/rating?api_key=0b5e8ce7494ae54d6c643adf4db40da7&session_id='+storeUser.sesija, {
+  "value": movie.rating,
+
+  })
+    }
+    const removeRate = async(movie,tip) => {
+ movie.rating = 0
+        console.log(movie.rating,'after')
+ await axios.delete('https://api.themoviedb.org/3/'+tip+'/'+movie.id+'/rating?api_key=0b5e8ce7494ae54d6c643adf4db40da7&session_id='+storeUser.sesija,)
+    }
+
+
+
+    const addList =(movie) => {
+toggleLists.value = true
+$(document).mouseup(function(e) 
+{
+    var container = $(".lists");
+
+    if (!container.is(e.target) && container.has(e.target).length === 0) 
+    {
+        toggleLists.value = false
+    }
+});
+
+
+
+    }
+      const postWatchlist =(id) => {
+try{    
+let i = wMoviesIds.value.indexOf(id)
+if(wMoviesIds.value.includes(id)){
+
+    wMoviesIds.value.splice(i,1)
+    console.log(wMoviesIds.value)
+axios.post('https://api.themoviedb.org/3/account/{account_id}/watchlist?api_key=0b5e8ce7494ae54d6c643adf4db40da7&session_id='+storeUser.sesija, {
+  "media_type": "movie",
+  "media_id": id,
+  "watchlist": false
+  })
+
+}else{
+        wMoviesIds.value.push(id)
+    axios.post('https://api.themoviedb.org/3/account/{account_id}/watchlist?api_key=0b5e8ce7494ae54d6c643adf4db40da7&session_id='+storeUser.sesija, {
+  "media_type": "movie",
+  "media_id": id,
+  "watchlist": true
+  })
+
+}
+
+    }
+    catch(err){}
+    }
+      const postFav =(id) => {
+try{    
+let i = fMoviesIds.value.indexOf(id)
+if(fMoviesIds.value.includes(id)){
+
+    fMoviesIds.value.splice(i,1)
+    console.log(fMoviesIds.value)
+axios.post('https://api.themoviedb.org/3/account/{account_id}/favorite?api_key=0b5e8ce7494ae54d6c643adf4db40da7&session_id='+storeUser.sesija, {
+  "media_type": "movie",
+  "media_id": id,
+  "favorite": false
+  })
+
+}else{
+        fMoviesIds.value.push(id)
+    axios.post('https://api.themoviedb.org/3/account/{account_id}/favorite?api_key=0b5e8ce7494ae54d6c643adf4db40da7&session_id='+storeUser.sesija, {
+  "media_type": "movie",
+  "media_id": id,
+  "favorite": true
+  })
+
+}
+
+    }
+    catch(err){}
+    }
+  loadOtherData()
   loadAvaliableRegions()
   loadGenres()
   loadData()
-
+if(store.sesija){
+    loadRateData()
+}
 </script>
 
 <style scoped>
@@ -1012,13 +1240,39 @@ for (i = 0; i < acc.length; i++) {
   border-radius: 5px;
   overflow: hidden;
   padding: 10px 0 10px 0;
-
-
+}
+.moreWithSession{
+  width: 120px;
+  background: white;
+  position: absolute;
+  z-index: 3;
+  left: 110px;
+  top: 35px;
+  display: none;
+  flex-direction: column;
+  border: 1px solid lightgray;
+  border-radius: 5px;
+  padding: 10px 0 10px 0;
+}
+.moreWithSession a{
+  display: flex;
+  padding: 10px 0px 10px 10px;
+  cursor: pointer;
+  align-items: center;
+  color: gray;
+  text-decoration: none;
+}
+.icon{
+    width: 15px;
+    height: 15px;
+    filter: invert(1);
+    margin-right: 5px;
 }
 .more img{
   width: 15px;
   height: 15px;
   margin-top: 3px;
+  margin-right: 5px;
 
 }
 .more p,a{
@@ -1041,6 +1295,13 @@ for (i = 0; i < acc.length; i++) {
 .more a:hover{
   background: #0d253f;
   color: white;
+}
+.moreWithSession a:hover{
+  background: #0d253f;
+  color: white;
+}
+.more a:hover img{
+    filter: invert(1);
 }
 .line{
   border-top: 2px solid black;
@@ -1198,5 +1459,47 @@ outline: 3px solid rgb(134, 217, 255);
   font-size: 0.6em;
   color: white;
   font-weight: bold;
+}
+.stars{
+    padding: 0px 20px;
+    height: 60px;
+    background: #0d253f;
+    position: absolute;
+    margin-left: -90px;
+    z-index: 5;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top:160px;
+}
+.stars img{
+    filter: invert(1);
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+}
+.lists a{
+    color: white;
+    font-weight: bold;
+    text-decoration: none;
+    z-index: 3;
+}
+.lists{
+    width: 150px;
+    height: 60px;
+    background: #0d253f;
+    position: absolute;
+    margin-left: 120px;
+    top: -1px;
+    z-index: 12;
+    display: flex;
+    border-radius: 5px;
+    align-items: center;
+    justify-content: center;
+    cursor: auto;
+}
+.removeRate{
+  cursor: pointer;
 }
 </style>

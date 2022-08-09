@@ -14,6 +14,7 @@ import TopratedTV from '../views/tv/top_rated.vue'
 
 import Login from '../views/Login.vue'
 import Moviedetails from '../views/Moviedetails.vue'
+import Tvdetails from '../views/Tvdetails.vue'
 
 import AlternativeTitles from '../components/Moviedetails/Alternativetitles.vue'
 import CastAndCrew from '../components/Moviedetails/CastAndCrew.vue'
@@ -25,6 +26,18 @@ import Logos from '../components/Moviedetails/MediaLogos.vue'
 import Posters from '../components/Moviedetails/MediaPosters.vue'
 import MediaVideos from '../components/Moviedetails/MediaVideos.vue'
 import Reviews from '../components/Moviedetails/Reviews.vue'
+
+import AlternativeTitlesTv from '../components/Tvdetails/Alternativetitles.vue'
+import CastAndCrewTv from '../components/Tvdetails/CastAndCrew.vue'
+import TranslationsTv from '../components/Tvdetails/Translations.vue'
+
+import BackdropsTv from '../components/Tvdetails/MediaBackdrops.vue'
+import LogosTv from '../components/Tvdetails/MediaLogos.vue'
+import PostersTv from '../components/Tvdetails/MediaPosters.vue'
+import MediaVideosTv from '../components/Tvdetails/MediaVideos.vue'
+import ReviewsTv from '../components/Tvdetails/Reviews.vue'
+import Seasons from '../components/Tvdetails/Seasons.vue'
+import Season from '../components/Tvdetails/Season.vue'
 
 
 const routes = [
@@ -134,10 +147,70 @@ const routes = [
     name: 'Reviews',
     component: Reviews
   },
+  {
+    path: '/tv/:id',
+    name: 'Tvdetails',
+    component: Tvdetails
+  },
+  {
+    path: '/tv/:id/titles',
+    name: 'AlternativeTitlesTv',
+    component: AlternativeTitlesTv
+  },
+  {
+    path: '/tv/:id/cast',
+    name: 'CastAndCrewTv',
+    component: CastAndCrewTv
+  },
+  {
+    path: '/tv/:id/translations',
+    name: 'TranslationsTv',
+    component: TranslationsTv
+  },
+
+  {
+    path: '/tv/:id/backdrops',
+    name: 'BackdropsTv',
+    component: BackdropsTv
+  },
+  {
+    path: '/tv/:id/logos',
+    name: 'LogosTv',
+    component: LogosTv
+  },
+  {
+    path: '/tv/:id/posters',
+    name: 'PostersTv',
+    component: PostersTv
+  },
+  {
+    path: '/tv/:id/videos',
+    name: 'MediaVideosTv',
+    component: MediaVideosTv
+  },
+  {
+    path: '/tv/:id/reviews',
+    name: 'ReviewsTv',
+    component: ReviewsTv
+  },
+  {
+    path: '/tv/:id/seasons',
+    name: 'Seasons',
+    component: Seasons
+  },
+  {
+    path: '/tv/:id/season/:s',
+    name: 'Season',
+    component: Season
+  },
 
 ]
 
 const router = createRouter({
+  scrollBehavior(to, from, savedPosition) {
+    // always scroll to top
+    return { top: 0 }
+  },
   history: createWebHistory(process.env.BASE_URL),
   routes
 })

@@ -1,27 +1,27 @@
 <template>
 <div class="header" v-if="data">
-        <span><div><a>Overview</a> <div class="arrow"></div></div><div class="headerDropdown">
-            <router-link :to="{ name: 'Moviedetails', params: { id: id }}">Main</router-link>
-            <router-link :to="{ name: 'AlternativeTitles', params: { id: id }}">Alternative Titles</router-link>
-            <router-link :to="{ name: 'CastAndCrew', params: { id: id }}">Cast & Crew</router-link>
-            <router-link :to="{ name: 'ReleaseDates', params: { id: id }}">Release Dates</router-link>
-            <router-link :to="{ name: 'Translations', params: { id: id }}">Translations</router-link>
-            <a :href="'https://www.themoviedb.org/movie/'+id+'/changes'">Changes</a>
+        <span><div class="overview"><a>Overview</a> <div class="arrow"></div></div><div class="headerDropdown">
+            <router-link :to="{ name: 'Tvdetails', params: { id: id }}">Main</router-link>
+            <router-link :to="{ name: 'AlternativeTitlesTv', params: { id: id }}">Alternative Titles</router-link>
+            <router-link :to="{ name: 'CastAndCrewTv', params: { id: id }}">Cast & Crew</router-link>
+            <router-link :to="{ name: 'Seasons', params: { id: id }}">Seasons</router-link>
+            <router-link :to="{ name: 'TranslationsTv', params: { id: id }}">Translations</router-link>
+            <a :href="'https://www.themoviedb.org/tv/'+id+'/changes'">Changes</a>
             </div></span>
         <span><div>Media <div class="arrow"></div></div><div class="headerDropdown">
-            <router-link :to="{ name: 'Backdrops', params: { id: id }}">Backdrops</router-link>
-            <router-link :to="{ name: 'Logos', params: { id: id }}">Logos</router-link>
-            <router-link :to="{ name: 'Posters', params: { id: id }}">Posters</router-link>
-            <router-link :to="{ name: 'MediaVideos', params: { id: id }}">Videos</router-link>
+            <router-link :to="{ name: 'BackdropsTv', params: { id: id }}">Backdrops</router-link>
+            <router-link :to="{ name: 'LogosTv', params: { id: id }}">Logos</router-link>
+            <router-link :to="{ name: 'PostersTv', params: { id: id }}">Posters</router-link>
+            <router-link :to="{ name: 'MediaVideosTv', params: { id: id }}">Videos</router-link>
             </div></span>
-        <span><div class="overview">Fandom <div class="arrow"></div></div><div class="headerDropdown">
-            <a :href="'https://www.themoviedb.org/movie/'+id+'/discuss'">Discussions</a>
-            <router-link :to="{ name: 'Reviews', params: { id: id }}">Reviews</router-link>
+        <span><div>Fandom <div class="arrow"></div></div><div class="headerDropdown">
+            <a :href="'https://www.themoviedb.org/tv/'+id+'/discuss'">Discussions</a>
+            <router-link :to="{ name: 'ReviewsTv', params: { id: id }}">Reviews</router-link>
             </div></span>
         <span><div>Share <div class="arrow"></div></div><div class="headerDropdown">
             <a @click="overlayToggle">Share Link</a>
             <a :href="'https://www.facebook.com/'+external.facebook_id">Facebook</a>
-            <a :href="'https://twitter.com/'+external.facebook_id">Tweet</a>
+            <a :href="'https://twitter.com/'+external.twitter_id">Tweet</a>
             </div></span>
 </div>
 <div class="overlay" v-if="overlayOn" @click.self="overlayToggle">
@@ -33,10 +33,10 @@
 </div>
 <div class="mainMenuWrap">
     <div class="mainMenu" id="back">
-            <div class="slika" v-if="data.poster_path" ><router-link :to="{ name: 'Moviedetails', params: { id: id }}"><img class="img" ref="slikica" :src=" slika + data.poster_path" alt="" ></router-link></div>
+            <div class="slika" v-if="data.poster_path" ><router-link :to="{ name: 'Tvdetails', params: { id: id }}"><img class="img" ref="slikica" :src=" slika + data.poster_path" alt="" ></router-link></div>
             <div class="info">
-                <router-link :to="{ name: 'Moviedetails', params: { id: id }}"><h1>{{data.original_title}}</h1></router-link>
-                <router-link :to="{ name: 'Moviedetails', params: { id: id }}"><a>← Back to main</a></router-link>
+                <router-link :to="{ name: 'Tvdetails', params: { id: id }}"><h1>{{data.original_name}}</h1></router-link>
+                <router-link :to="{ name: 'Tvdetails', params: { id: id }}"><a>← Back to main</a></router-link>
             </div>
 
     </div>
@@ -90,7 +90,7 @@ setup(){
 
     const loadData = async() => {
     try{
-      let movieData = await axios.get('https://api.themoviedb.org/3/movie/'+ id +'?api_key=0b5e8ce7494ae54d6c643adf4db40da7&language=en-US&append_to_response=reviews')
+      let movieData = await axios.get('https://api.themoviedb.org/3/tv/'+ id +'?api_key=0b5e8ce7494ae54d6c643adf4db40da7&language=en-US&append_to_response=reviews')
       data.value = await movieData.data
     console.log(data.value)
 
@@ -100,7 +100,7 @@ setup(){
 
     const loadOther = async() => {
     try{
-      let d = await axios.get('https://api.themoviedb.org/3/movie/' + id + '/reviews?api_key=0b5e8ce7494ae54d6c643adf4db40da7&language=en-US&page=1')
+      let d = await axios.get('https://api.themoviedb.org/3/tv/' + id + '/reviews?api_key=0b5e8ce7494ae54d6c643adf4db40da7&language=en-US&page=1')
       otherData.value = await d.data.results
     console.log(otherData.value)
 
@@ -110,7 +110,7 @@ setup(){
 
     const loadExternal = async() => {
         try{
-            let recommendationsData = await axios.get('https://api.themoviedb.org/3/movie/'+ id +'/external_ids?api_key=0b5e8ce7494ae54d6c643adf4db40da7')
+            let recommendationsData = await axios.get('https://api.themoviedb.org/3/tv/'+ id +'/external_ids?api_key=0b5e8ce7494ae54d6c643adf4db40da7')
             external.value = await recommendationsData.data
         }   
         catch(err){}

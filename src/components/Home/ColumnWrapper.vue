@@ -69,7 +69,7 @@ const toMovie = (index) => {
       if(index.type==='movie'){
         router.push({ name: 'Moviedetails', params: { id: index.id }})    
       }else if(index.type=='tv'){
-        console.log('tv')
+        router.push({ name: 'Tvdetails', params: { id: index.id }})  
       }
 }
 

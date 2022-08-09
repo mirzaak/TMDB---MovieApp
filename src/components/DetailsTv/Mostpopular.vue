@@ -34,7 +34,7 @@ import axios from 'axios'
     const overlayOn = ref(false)
     const loadVideos = async() => {
         try{
-            let videosData = await axios.get('https://api.themoviedb.org/3/movie/'+ id +'/videos?api_key=0b5e8ce7494ae54d6c643adf4db40da7&language=en-US')
+            let videosData = await axios.get('https://api.themoviedb.org/3/tv/'+ id +'/videos?api_key=0b5e8ce7494ae54d6c643adf4db40da7&language=en-US')
             media.value = await videosData.data.results[0]
             media.value.length = 1
         }
@@ -44,7 +44,7 @@ import axios from 'axios'
 
     const loadImages = async() => {
         try{
-            let imagesData = await axios.get('https://api.themoviedb.org/3/movie/'+ id +'/images?api_key=0b5e8ce7494ae54d6c643adf4db40da7&language=en-US&include_image_language=en%2Cnull')
+            let imagesData = await axios.get('https://api.themoviedb.org/3/tv/'+ id +'/images?api_key=0b5e8ce7494ae54d6c643adf4db40da7&language=en-US&include_image_language=en%2Cnull')
             images.value = await imagesData.data.backdrops[0].file_path
 
         }   
@@ -54,7 +54,7 @@ import axios from 'axios'
 
     const loadPosters = async() => {
         try{
-            let imagesData = await axios.get('https://api.themoviedb.org/3/movie/'+ id +'/images?api_key=0b5e8ce7494ae54d6c643adf4db40da7&language=en-US&include_image_language=en%2Cnull')
+            let imagesData = await axios.get('https://api.themoviedb.org/3/tv/'+ id +'/images?api_key=0b5e8ce7494ae54d6c643adf4db40da7&language=en-US&include_image_language=en%2Cnull')
             poster.value = await imagesData.data.posters[0].file_path
         }   
         catch(err){}

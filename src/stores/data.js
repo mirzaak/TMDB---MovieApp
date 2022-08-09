@@ -17,6 +17,13 @@ export const useDataStore = defineStore("data", {
       async getData (query,type) {
           const fetchedData = await axios.get('https://api.themoviedb.org/3/'+query+'/'+type+'?api_key=0b5e8ce7494ae54d6c643adf4db40da7&language=en-US&page=1')
           this.data = await fetchedData.data.results
+          for(let i = 0 ; this.data.length > i ; i++){
+            if(query == 'movie'){
+                this.data[i].type = 'movie'
+            }else if(query == 'tv'){
+                this.data[i].type = 'tv'
+            }
+          }
       },
       async getDataTwo (query,type) {
           const fetchedData = await axios.get('https://api.themoviedb.org/3/'+query+'/'+type+'?api_key=0b5e8ce7494ae54d6c643adf4db40da7&language=en-US&page=1')
