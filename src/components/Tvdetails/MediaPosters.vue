@@ -1,13 +1,14 @@
 <template>
 <div class="header" v-if="data">
-        <span><div><a>Overview</a> <div class="arrow"></div></div><div class="headerDropdown">
+        <span><div class="overview"><a>Overview</a> <div class="arrow"></div></div><div class="headerDropdown">
             <router-link :to="{ name: 'Tvdetails', params: { id: id }}">Main</router-link>
             <router-link :to="{ name: 'AlternativeTitlesTv', params: { id: id }}">Alternative Titles</router-link>
             <router-link :to="{ name: 'CastAndCrewTv', params: { id: id }}">Cast & Crew</router-link>
+            <router-link :to="{ name: 'Seasons', params: { id: id }}">Seasons</router-link>
             <router-link :to="{ name: 'TranslationsTv', params: { id: id }}">Translations</router-link>
             <a :href="'https://www.themoviedb.org/tv/'+id+'/changes'">Changes</a>
             </div></span>
-        <span><div class="overview">Media <div class="arrow"></div></div><div class="headerDropdown">
+        <span><div>Media <div class="arrow"></div></div><div class="headerDropdown">
             <router-link :to="{ name: 'BackdropsTv', params: { id: id }}">Backdrops</router-link>
             <router-link :to="{ name: 'LogosTv', params: { id: id }}">Logos</router-link>
             <router-link :to="{ name: 'PostersTv', params: { id: id }}">Posters</router-link>
@@ -22,7 +23,7 @@
             <a :href="'https://www.facebook.com/'+external.facebook_id">Facebook</a>
             <a :href="'https://twitter.com/'+external.twitter_id">Tweet</a>
             </div></span>
-</div>
+</div>s
 <div class="overlay" v-if="overlayOn" @click.self="overlayToggle">
 <div class="overlayVideo">
     <a>Share {{data.original_title}}</a>

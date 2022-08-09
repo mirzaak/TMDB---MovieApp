@@ -93,7 +93,7 @@ onMounted(() => {
   display: flex;
   width:1300px;
   overflow-x: scroll;
-  padding: 10px 0 10px 0;
+  padding: 20px 0 10px 0;
 }
 .movieWrapper{
   display: flex;
@@ -103,6 +103,7 @@ onMounted(() => {
   width: 154px;
   margin-left: 20px;
   overflow: hidden;
+  margin-bottom: 10px;
 }
 .movieCard img{
   border-radius: 10px;

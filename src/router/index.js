@@ -39,6 +39,10 @@ import ReviewsTv from '../components/Tvdetails/Reviews.vue'
 import Seasons from '../components/Tvdetails/Seasons.vue'
 import Season from '../components/Tvdetails/Season.vue'
 
+import Profile from '../views/Profile.vue'
+import Watchlist from '../views/Watchlist.vue'
+import Ratings from '../views/Ratings.vue'
+
 
 const routes = [
   {
@@ -203,6 +207,21 @@ const routes = [
     name: 'Season',
     component: Season
   },
+  {
+    path: '/u/:id',
+    name: 'Profile',
+    component: Profile
+  },
+  {
+    path: '/u/:id/watchlist',
+    name: 'Watchlist',
+    component: Watchlist
+  },
+  {
+    path: '/u/:id/ratings',
+    name: 'Ratings',
+    component: Ratings
+  },
 
 ]
 
@@ -218,7 +237,7 @@ router.beforeEach(async(to, from) => {
 const store = useUserStore()
   if(store.sesija && to.name == 'Login'){
     return { name: 'Home' }
-  } 
-  
+  }
+
 })
 export default router

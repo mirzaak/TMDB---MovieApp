@@ -43,10 +43,13 @@
                     <router-link :to="{ name: 'Login'}"><li>Login</li></router-link>
                 </li>
                 <li v-if="store.sesija" class="dropdownItem">
-                    <a>{{store.username}}</a>
-                    <div class="menu">
+                    <img @click="toggleMenu()" :src="profileImg" alt="">
+                    <div v-if="toggleProfile" class="menuProfile">
                         <ul>
-                            <router-link  @click="logOut()" :to="{ name: 'Home'}"><li>Log Out</li></router-link>
+                            <span class="vyp"><router-link :to="{ name: 'Profile', params:{id:store.username}}"><li><p>{{store.username}}</p>View your profile</li></router-link></span>
+                            <span><router-link  :to="{ name: 'Ratings', params:{id:store.username}}"><li>Ratings</li></router-link>
+                            <router-link :to="{ name: 'Watchlist', params:{id:store.username}}"><li>Watchlist</li></router-link></span>
+                            <span><router-link  @click="logOut()" :to="{ name: 'Home'}"><li>Log Out</li></router-link></span>
                         </ul>
                     </div>
 
@@ -62,12 +65,38 @@
 </template>
 
 <script setup>
+import $ from 'jquery'
+import { useRouter, useRoute } from 'vue-router'
 import { ref } from 'vue'
 import { useUserStore } from "../stores/user.js";
-
+import axios from 'axios'
+const route = useRoute()
 const store = useUserStore();
 const nav = ref()
+const profileImg = ref()
+const toggleProfile = ref(false)
+const toggleMenu = () => {
+toggleProfile.value = true
+$(document).mouseup(function(e) 
+{
+    var container = $(".menuProfile");
 
+    if (!container.is(e.target) && container.has(e.target).length === 0) 
+    {
+        toggleProfile.value = false
+    }
+});
+}
+    
+const loadData = async() => {
+    try{
+      let movieData = await axios.get('https://api.themoviedb.org/3/account?api_key=0b5e8ce7494ae54d6c643adf4db40da7&session_id='+store.sesija)
+      profileImg.value = 'https://www.gravatar.com/avatar/'+ await movieData.data.avatar.gravatar.hash
+    console.log(data.value)
+    console.log(sesija)
+    }
+    catch(err){}
+    }
 window.onscroll = function() {scrollFunction()};
 
 function scrollFunction() {
@@ -85,6 +114,7 @@ const logOut = () => {
     localStorage.removeItem('username');
     localStorage.removeItem('sesija');
 }
+loadData()
 </script>
 
 <style scoped>
@@ -124,10 +154,23 @@ ul{
 .menu{
     position: absolute;
     top: 50px;
+    left: -3px;
     border: 1px solid lightgray;
     border-radius: 7px;
     background: white;
     visibility:hidden;
+    width: 180px;
+    z-index: 5;
+
+}
+.menuProfile{
+    position: absolute;
+    top: 70px;
+    right: -63px;
+    border: 1px solid lightgray;
+    border-radius: 7px;
+    background: white;
+    width: 180px;
     z-index: 5;
 
 }
@@ -136,7 +179,7 @@ ul{
     color: black;
 }
 .menu li{
-    padding: 8px 40px 8px 20px;
+    padding: 8px 0px 8px 20px;
     cursor: pointer;
 }
 .menu li:hover{
@@ -150,10 +193,27 @@ ul{
     color: black;
     font-weight: 400;
 }
+.menuProfile ul{
+    padding: 7px 0;
+    color: black;
+}
+.menuProfile li{
+    padding: 8px 0px 8px 20px;
+    cursor: pointer;
+}
+.menuProfile li:hover{
+    background:lightgray;
+}
+.menuProfile a{
+    color: black;
+    font-weight: 400;
+}
 .dropdownItem {
     padding: 20px 10px 20px 10px;
     margin-right: 10px;
     cursor: pointer;
+    display: flex;
+    position: relative;
 }
 .dropdownItem:hover .menu{
     visibility: visible;
@@ -171,5 +231,39 @@ a{
     height: 30px;
     align-self: center;
     cursor: pointer;
+}
+.dropdownItem img{
+    width: 40px;
+    height: 40px;
+    border-radius: 40px;
+}
+.menuProfile::after {
+  content: " ";
+  position: absolute;
+  bottom: 100%;  /* At the top of the tooltip */
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: transparent transparent white transparent;
+}
+.menuProfile span{
+    display: flex;
+    flex-direction: column;
+    border-bottom: 1px solid lightgray;
+}
+.menuProfile span:last-of-type{
+    border: none;
+}
+.menuProfile p{
+    margin: 0;
+}
+.menuProfile span:first-of-type a{
+    font-size: 0.8em;
+    color: gray;
+}
+.menuProfile span:first-of-type p{
+    font-size: 1.3em;
+    color: black;
 }
 </style>
