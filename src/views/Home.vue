@@ -7,7 +7,8 @@
         <h2>Millions of movies, TV Shows and people to discover. Explore Now.</h2>
         <span class="search">
           <label for="search"></label>
-          <input type="text" placeholder="Search for a movie, tv show, person...">
+          <input type="text" placeholder="Search for a movie, tv show, person..." v-model="searchText" @keyup.enter="search()">
+          <button class="submit" @click="search()">Search</button>
         </span>
   </div>
 </div>
@@ -18,13 +19,16 @@
 </template>
 
 <script setup>
+import { useRouter, useRoute } from 'vue-router'
 import axios from 'axios'
 import { computed, onMounted, ref } from 'vue';
 import ColumnWrapper from '../components/Home/ColumnWrapper.vue'
 import ColumnWrapperTwo from '../components/Home/ColumnWrapperTwo.vue'
 import ColumnWrapperThree from '../components/Home/ColumnWrapperThree.vue'
 import { useDataStore } from "../stores/data.js";
-
+const router = useRouter()
+const route = useRoute()
+const searchText = ref('')
 const store = useDataStore();
       function getRandomInt(max) {
       return Math.floor(Math.random() * max);
@@ -41,6 +45,9 @@ const backSlika = ref('')
           merged.value = mergeMovies.concat(mergeTVs)
           backSlika.value = merged.value[getRandomInt(21)].backdrop_path
       }
+    const search = () => {
+        router.push({ name: 'Searched', params: { query: searchText.value }})  
+    }
 onMounted(() => {
   mergeData()
 })
@@ -105,5 +112,34 @@ onMounted(() => {
   z-index: 2;
   filter:opacity(0.6);
   position: absolute;
+}
+.search{
+  display: flex;
+  flex-direction: row;
+  width: 1110px;
+  margin: auto;
+  margin-top: 0;
+  margin-bottom: 0;
+  position: relative;
+}
+.submit{
+  font-size: 15px;
+  text-align: center;
+  font-weight: bold;
+  color: white;
+  cursor: pointer;
+  background: linear-gradient(to right, rgba(30	213	169) 0%,rgba(1	180	228) 100%);
+  width: 130px;
+  height: 50px;
+  padding: 10px;
+  position: absolute;
+  border-radius: 30px;
+  border: none;
+  outline: none;
+  top: 30px;
+  left: 900px;
+}
+.submit:hover{
+  color: black;
 }
 </style>

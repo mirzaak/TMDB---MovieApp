@@ -43,6 +43,9 @@ import Profile from '../views/Profile.vue'
 import Watchlist from '../views/Watchlist.vue'
 import Ratings from '../views/Ratings.vue'
 
+import Search from '../views/Search.vue'
+import Searched from '../views/Searched.vue'
+
 
 const routes = [
   {
@@ -221,6 +224,16 @@ const routes = [
     path: '/u/:id/ratings',
     name: 'Ratings',
     component: Ratings
+  },
+  {
+    path: '/search',
+    name: 'Search',
+    component: Search
+  },
+  {
+    path: '/search/:query',
+    name: 'Searched',
+    component: Searched
   },
 
 ]

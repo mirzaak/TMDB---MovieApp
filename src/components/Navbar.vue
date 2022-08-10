@@ -55,7 +55,7 @@
 
                 </li>
                 <li v-if="!store.sesija" class="dropdownItem"><a href="https://www.themoviedb.org/signup">Join TMDB</a></li>
-                <li class="search"><img src="../assets/search.svg" alt="" width="30"></li>
+                <router-link :to="{ name: 'Search'}"><li class="search"><img src="../assets/search.svg" alt="" width="30"></li></router-link>
             </ul>
         </div>
     </div>
