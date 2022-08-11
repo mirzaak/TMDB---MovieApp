@@ -30,10 +30,18 @@
 
                 </li>
                 <li class="dropdownItem">
-                    <a>People</a>
+                    <router-link :to="{ name: 'People'}"><li>People</li></router-link>
                 </li>
                 <li class="dropdownItem">
                     <a>More</a>
+                    <div class="menu">
+                        <ul>
+                            <a href="https://www.themoviedb.org/discuss"><li>Discussions</li></a>
+                            <a href="https://www.themoviedb.org/leaderboard"><li>Leaderboard</li></a>
+                            <a href="https://www.themoviedb.org/talk"><li>Support</li></a>
+                            <a href="https://www.themoviedb.org/documentation/api"><li>API</li></a>
+                        </ul>
+                    </div>
                 </li>
             </ul>
         </div>
@@ -43,7 +51,8 @@
                     <router-link :to="{ name: 'Login'}"><li>Login</li></router-link>
                 </li>
                 <li v-if="store.sesija" class="dropdownItem">
-                    <img @click="toggleMenu()" :src="profileImg" alt="">
+                    <img v-if="profileImg" @click="toggleMenu()" :src="profileImg" alt="">
+                    <img v-if="!profileImg" @click="toggleMenu()" :src="profileImg" alt="">
                     <div v-if="toggleProfile" class="menuProfile">
                         <ul>
                             <span class="vyp"><router-link :to="{ name: 'Profile', params:{id:store.username}}"><li><p>{{store.username}}</p>View your profile</li></router-link></span>

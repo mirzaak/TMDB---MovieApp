@@ -356,12 +356,6 @@ import Posters from '../components/Details/Posters.vue'
         favTV.value = await favTVData.data.results
         rMovies.value = await rMoviesData.data.results
         rTV.value = await rTVData.data.results
-        console.log(wMovies.value,'wMovies')
-        console.log(wTV.value)
-        console.log(favMovies.value)
-        console.log(favTV.value)
-        console.log(rMovies.value)
-        console.log(rTV.value)
     for(let i = 0; wMovies.value.length > i; i++){
         watchlistMovies.value.push(wMovies.value[i].id)
     }
@@ -385,7 +379,6 @@ import Posters from '../components/Details/Posters.vue'
     for(let i = 0; rMovies.value.length > i; i++){
         if(rMovies.value[i].id==data.value.id){
             movieRating.value=rMovies.value[i].rating
-            console.log(movieRating.value,'mRating')
         }
         
     }
@@ -414,7 +407,6 @@ import Posters from '../components/Details/Posters.vue'
       poster.value = await movieData.data.poster_path
       language.value = await movieData.data.spoken_languages[0].english_name
       keywords.value = await movieData.data.keywords.keywords
-    console.log(data.value,'data')
     }
     catch(err){}
     }
@@ -425,7 +417,6 @@ import Posters from '../components/Details/Posters.vue'
       details.value = await reviewData.data.reviews.results[0].author_details
       revjuSlika.value = await reviewData.data.reviews.results[0].author_details.avatar_path.substring(1)
       revjuRating.value = await reviewData.data.reviews.results[0].author_details.rating
-      console.log(review.value)
     }
     catch(err){}
     }
@@ -437,7 +428,6 @@ import Posters from '../components/Details/Posters.vue'
             credits.value.length = 8
         }
         catch(err){}
-        console.log(credits.value)
     }
     const loadFourCredits = async() => {
         try{
@@ -446,7 +436,6 @@ import Posters from '../components/Details/Posters.vue'
             fourCredits.value.length = 4
         }
         catch(err){}
-        console.log(credits.value)
     }
 
     const loadImages = async() => {
@@ -455,7 +444,6 @@ import Posters from '../components/Details/Posters.vue'
             images.value = await imagesData.data
         }   
         catch(err){}
-        console.log(images.value,'images')
     }
     const loadRecommendations = async() => {
         try{
@@ -463,7 +451,6 @@ import Posters from '../components/Details/Posters.vue'
             recommendations.value = await recommendationsData.data.results
         }   
         catch(err){}
-        console.log(recommendations.value)
     }
     const loadExternal = async() => {
         try{
@@ -471,7 +458,6 @@ import Posters from '../components/Details/Posters.vue'
             external.value = await recommendationsData.data
         }   
         catch(err){}
-        console.log(external.value,'external')
     }
     const loadVideos = async() => {
         try{
@@ -497,7 +483,6 @@ try{
 if(favouriteMovies.value.includes(id)){
 
     favouriteMovies.value.splice(i,1)
-    console.log(favouriteMovies.value)
 axios.post('https://api.themoviedb.org/3/account/{account_id}/favorite?api_key=0b5e8ce7494ae54d6c643adf4db40da7&session_id='+store.sesija, {
   "media_type": "movie",
   "media_id": data.value.id,
@@ -545,7 +530,6 @@ axios.post('https://api.themoviedb.org/3/account/{account_id}/watchlist?api_key=
   "value": movieRating.value,
 
   })
-  console.log('posted')
     }
 
     const rate =async() => {

@@ -21,8 +21,15 @@
         <span><div>Share <div class="arrow"></div></div><div class="headerDropdown">
             <a @click="overlayToggle">Share Link</a>
             <a :href="'https://www.facebook.com/'+external.facebook_id">Facebook</a>
-            <a :href="'https://twitter.com/'+external.twitter_id">Tweet</a>
+            <a :href="'https://twitter.com/'+external.facebook_id">Tweet</a>
             </div></span>
+</div>
+<div class="overlay" v-if="overlayOn" @click.self="overlayToggle">
+<div class="overlayVideo">
+    <a>Share {{data.original_title}}</a>
+    <p>URL</p>
+    <input type="text" :value="urlNow">
+</div>
 </div>
 <div class="mainMenuWrap">
     <div class="mainMenu" id="back">
@@ -88,6 +95,10 @@ import { ref, shallowRef } from 'vue'
     const lastImg = ref('')
     const datum = ref('')
     const external = ref([])
+
+    const urlNow = ref(window.location.href)
+    const overlayOn = ref(false)
+
     const loadData = async() => {
     try{
       let movieData = await axios.get('https://api.themoviedb.org/3/movie/'+ id +'?api_key=0b5e8ce7494ae54d6c643adf4db40da7&language=en-US&append_to_response=reviews')
@@ -126,7 +137,10 @@ import { ref, shallowRef } from 'vue'
         }
     }
     }
+    const overlayToggle = () => {
+        overlayOn.value = !overlayOn.value
 
+    }
 
 
 
@@ -426,5 +440,33 @@ loadExternal()
     color: gray;
     margin: 0;
     margin-left: 5px;
+}
+.overlay {
+  position: fixed; /* Sit on top of the page content */
+  display: flex;
+  width: 100%; /* Full width (cover the whole page) */
+  height: 100%; /* Full height (cover the whole page) */
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0,0,0,0.5);
+  z-index: 3; /* Specify a stack order in case you're using a different order for other elements */
+  cursor: pointer; /* Add a pointer on hover */
+  align-items: center;
+  justify-content: center;
+
+
+}
+.overlayVideo{
+    display: flex;
+    width: 400px;
+    height: 100px;
+    background: white;
+    margin: auto;
+    flex-direction: column;
+    padding: 10px;
+    overflow: hidden;
+
 }
 </style>

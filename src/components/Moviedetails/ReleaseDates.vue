@@ -24,6 +24,13 @@
             <a :href="'https://twitter.com/'+external.facebook_id">Tweet</a>
             </div></span>
 </div>
+<div class="overlay" v-if="overlayOn" @click.self="overlayToggle">
+<div class="overlayVideo">
+    <a>Share {{data.original_title}}</a>
+    <p>URL</p>
+    <input type="text" :value="urlNow">
+</div>
+</div>
 <div class="mainMenuWrap">
     <div class="mainMenu" id="back">
             <div class="slika" v-if="data.poster_path" ><router-link :to="{ name: 'Moviedetails', params: { id: id }}"><img class="img" ref="slikica" :src=" slika + data.poster_path" alt="" ></router-link></div>
@@ -87,7 +94,8 @@ import { ref, shallowRef } from 'vue'
     const rDates = ref([])
     const datum = ref('')
     const external = ref([])
-
+    const urlNow = ref(window.location.href)
+    const overlayOn = ref(false)
 
     const loadData = async() => {
     try{
@@ -128,7 +136,10 @@ import { ref, shallowRef } from 'vue'
         }
     }
     }
+    const overlayToggle = () => {
+        overlayOn.value = !overlayOn.value
 
+    }
 
 loadData()
 loadOther()
@@ -424,5 +435,33 @@ loadExternal()
     color: gray;
     margin: 0;
     margin-left: 5px;
+}
+.overlay {
+  position: fixed; /* Sit on top of the page content */
+  display: flex;
+  width: 100%; /* Full width (cover the whole page) */
+  height: 100%; /* Full height (cover the whole page) */
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0,0,0,0.5);
+  z-index: 3; /* Specify a stack order in case you're using a different order for other elements */
+  cursor: pointer; /* Add a pointer on hover */
+  align-items: center;
+  justify-content: center;
+
+
+}
+.overlayVideo{
+    display: flex;
+    width: 400px;
+    height: 100px;
+    background: white;
+    margin: auto;
+    flex-direction: column;
+    padding: 10px;
+    overflow: hidden;
+
 }
 </style>

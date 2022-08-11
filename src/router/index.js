@@ -46,6 +46,13 @@ import Ratings from '../views/Ratings.vue'
 import Search from '../views/Search.vue'
 import Searched from '../views/Searched.vue'
 
+import Actordetails from '../views/Actordetails.vue'
+import ActorChanges from '../views/ActordetailsFile/ActorChanges.vue'
+import ActorTranslations from '../views/ActordetailsFile/ActorTranslations.vue'
+
+import People from '../views/People.vue'
+import PeoplePage from '../views/PeoplePage.vue'
+
 
 const routes = [
   {
@@ -235,7 +242,46 @@ const routes = [
     name: 'Searched',
     component: Searched
   },
-
+  {
+    path: '/search/:query',
+    name: 'Searched',
+    component: Searched
+  },
+  {
+    path: '/search/:query',
+    name: 'Searched',
+    component: Searched
+  },
+  {
+    path: '/search/:query',
+    name: 'Searched',
+    component: Searched
+  },
+  {
+    path: '/person/:id',
+    name: 'Actordetails',
+    component: Actordetails
+  },
+  {
+    path: '/person/:id/translations',
+    name: 'ActorTranslations',
+    component: ActorTranslations
+  },
+  {
+    path: '/person/:id/changes',
+    name: 'ActorChanges',
+    component: ActorChanges
+  },
+  {
+    path: '/people',
+    name: 'People',
+    component: People
+  },
+  {
+    path: '/people/:page',
+    name: 'PeoplePage',
+    component: PeoplePage
+  },
 ]
 
 const router = createRouter({

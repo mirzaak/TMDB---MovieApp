@@ -1,127 +1,87 @@
 <template>
-<div class="header" v-if="data">
+    <div class="header">
         <span><div class="overview"><a>Overview</a> <div class="arrow"></div></div><div class="headerDropdown">
-            <router-link :to="{ name: 'Moviedetails', params: { id: id }}">Main</router-link>
-            <router-link :to="{ name: 'AlternativeTitles', params: { id: id }}">Alternative Titles</router-link>
-            <router-link :to="{ name: 'CastAndCrew', params: { id: id }}">Cast & Crew</router-link>
-            <router-link :to="{ name: 'ReleaseDates', params: { id: id }}">Release Dates</router-link>
-            <router-link :to="{ name: 'Translations', params: { id: id }}">Translations</router-link>
-            <a :href="'https://www.themoviedb.org/movie/'+id+'/changes'">Changes</a>
-            </div></span>
-        <span><div>Media <div class="arrow"></div></div><div class="headerDropdown">
-            <router-link :to="{ name: 'Backdrops', params: { id: id }}">Backdrops</router-link>
-            <router-link :to="{ name: 'Logos', params: { id: id }}">Logos</router-link>
-            <router-link :to="{ name: 'Posters', params: { id: id }}">Posters</router-link>
-            <router-link :to="{ name: 'MediaVideos', params: { id: id }}">Videos</router-link>
-            </div></span>
-        <span><div>Fandom <div class="arrow"></div></div><div class="headerDropdown">
-            <a :href="'https://www.themoviedb.org/movie/'+id+'/discuss'">Discussions</a>
-            <router-link :to="{ name: 'Reviews', params: { id: id }}">Reviews</router-link>
+            <router-link :to="{ name: 'Actordetails', params: { id: id }}">Main</router-link>
+            <router-link :to="{ name: 'ActorTranslations', params: { id: id }}">Translations</router-link>
+            <a :href="'https://www.themoviedb.org/person/'+data.id+'/changes'">Changes</a>
             </div></span>
         <span><div>Share <div class="arrow"></div></div><div class="headerDropdown">
             <a @click="overlayToggle">Share Link</a>
-            <a :href="'https://www.facebook.com/'+external.facebook_id">Facebook</a>
-            <a :href="'https://twitter.com/'+external.facebook_id">Tweet</a>
+            <a v-if="data.external_ids.facebook_id" :href="'https://www.facebook.com/'+data.external_ids.facebook_id">Facebook</a>
+            <a v-if="data.external_ids.twitter_id" :href="'https://twitter.com/'+data.external_ids.twitter_id">Tweet</a>
             </div></span>
-</div>
+    </div>
 <div class="overlay" v-if="overlayOn" @click.self="overlayToggle">
 <div class="overlayVideo">
-    <a>Share {{data.original_title}}</a>
-    <p>URL</p>
+    <a>Share {{data.name}}</a>
+    <p>URL:</p>
     <input type="text" :value="urlNow">
 </div>
 </div>
-<div class="mainMenuWrap">
-    <div class="mainMenu" id="back">
-            <div class="slika" v-if="data.poster_path" ><router-link :to="{ name: 'Moviedetails', params: { id: id }}"><img class="img" ref="slikica" :src=" slika + data.poster_path" alt="" ></router-link></div>
+    <div class="mainMenuWrapper">
+        <div class="mainMenu">
+            <div class="slika" v-if="data.profile_path"><router-link :to="{ name: 'Actordetails', params: { id: id }}"><img :src=" slika + data.profile_path" alt=""></router-link></div>
             <div class="info">
-                <router-link :to="{ name: 'Moviedetails', params: { id: id }}"><div class="glavniNaslov"><h1>{{data.original_title}}</h1><p>({{datum}})</p></div></router-link>
-                <router-link :to="{ name: 'Moviedetails', params: { id: id }}"><a>← Back to main</a></router-link>
+                <router-link :to="{ name: 'Actordetails', params: { id: id }}"><h1>{{data.name}}</h1></router-link>
+                <router-link :to="{ name: 'Actordetails', params: { id: id }}"><a>← Back to main</a></router-link>
             </div>
-
+        </div>
     </div>
-
-</div>
   <div class="pageWrapper">
       <div class="main">
           <div class="left">
               <div class="panel">
                   <div class="blueBox">
-                      <h3>Translations</h3><p>{{otherData.length}}</p>
+                      <h3>Search Results</h3>
                   </div>
-                  <div @click="scrollToElement(b.english_name)" class="panelContent" v-for="b in otherData" :key="b">
-                      <span><a ref="b">{{b.english_name}}</a><p></p></span>
+                  <div v-for="index in translations" :key="index" class="panelContent">
+                      <span ref="b" @click="scrollToElement(index.name)"><a>{{index.name}}</a><p>({{index.iso_639_1}}-{{index.iso_3166_1}})</p></span>
                   </div>
               </div>
           </div>
           <div class="right">
-              <div class="translations" v-for="a in otherData" :key="a">
+              <div class="translations" v-for="index in translations" :key="index">
                   <div  class="translation">
-                      <div class="up"><a ref="a">{{a.english_name}}</a><a>({{a.iso_639_1}}-</a><a>{{a.iso_3166_1}})</a></div>
-                        <div class="down">
-                            <div class="downUpWrap">
-                            </div>
-                            <div  class="downDown" id="element"><a>{{a.data.title}}</a></div>
-                            <div  class="downDown" id="element"><a v-if="a.data.tagline">{{a.data.tagline}}</a><a class="no" v-if="!a.data.tagline">No Tagline</a></div>
-                            <div  class="downDown" id="element"><a v-if="a.data.overview">{{a.data.overview}}</a><a class="no" v-if="!a.data.overview">No Overview</a></div>
-                            <div  class="downDown" id="element"><a v-if="a.data.runtime">{{a.data.runtime}} min</a><a class="no" v-if="!a.data.runtime">No Runtime</a></div>
-                        </div>
+                      <div class="up"><a ref="a" >{{index.name}}</a><p>({{index.iso_639_1}}-{{index.iso_3166_1}})</p></div>
+                        <div class="down">{{index.data.biography}}</div>
                   </div>
               </div>
           </div>
       </div>
   </div>
-<div class="content">
-    <div class="left"></div>
-    <div class="right"></div>
-</div>
 </template>
 
 <script setup>
-
 import { useRouter, useRoute } from 'vue-router'
 import axios from 'axios'
 import { ref, shallowRef } from 'vue'
+const a = ref(null)
+const b = ref(null)
+const route = useRoute()
+const router = useRouter()
+const slika = ref('https://image.tmdb.org/t/p/original/')
+const data = ref([])
+const translations = ref([])
+const id = route.params.id
+const translationRef = ref(null)
+const overlayOn = ref(false)
+const urlNow = ref(window.location.href)
 
-    const router = useRouter()
-    const route = useRoute()
-    const id = route.params.id
-    const slikica = ref(null)
-    const slika = ref('https://image.tmdb.org/t/p/original/')
-    const data = ref([])
-    const otherData = ref([])
-    const a = ref(null)
-    const b = ref(null)
-    const datum = ref('')
-    const external = ref([])
-
-    const urlNow = ref(window.location.href)
-    const overlayOn = ref(false)
 
     const loadData = async() => {
     try{
-      let movieData = await axios.get('https://api.themoviedb.org/3/movie/'+ id +'?api_key=0b5e8ce7494ae54d6c643adf4db40da7&language=en-US&append_to_response=reviews')
+      let movieData = await axios.get('https://api.themoviedb.org/3/person/'+id+'?api_key=0b5e8ce7494ae54d6c643adf4db40da7&language=en-&append_to_response=external_ids')
       data.value = await movieData.data
-      datum.value = await movieData.data.release_date.substring(0,4)
     console.log(data.value)
-
     }
     catch(err){}
     }
-    const loadExternal = async() => {
-        try{
-            let recommendationsData = await axios.get('https://api.themoviedb.org/3/movie/'+ id +'/external_ids?api_key=0b5e8ce7494ae54d6c643adf4db40da7')
-            external.value = await recommendationsData.data
-        }   
-        catch(err){}
-        console.log(external.value,'external')
-    }
-    const loadOther = async() => {
-    try{
-      let d = await axios.get('https://api.themoviedb.org/3/movie/'+id+'/translations?api_key=0b5e8ce7494ae54d6c643adf4db40da7')
-      otherData.value = await d.data.translations
-    console.log(otherData.value)
 
+    const loadTranslations = async() => {
+    try{
+      let tData = await axios.get('https://api.themoviedb.org/3/person/'+id+'/translations?api_key=0b5e8ce7494ae54d6c643adf4db40da7&language=en-US')
+      translations.value = await tData.data.translations
+    console.log(translations.value)
     }
     catch(err){}
     }
@@ -140,12 +100,13 @@ import { ref, shallowRef } from 'vue'
 
     }
 
+
 loadData()
-loadOther()
-loadExternal()
+loadTranslations()
 </script>
 
 <style scoped>
+
 .header{
     border-bottom: 1px solid lightgray;
     width: 100%;
@@ -172,8 +133,8 @@ loadExternal()
     height: 30px;
     align-items: center;
     display: flex;
-    padding-left: 20px;
-    padding-right: 60px;
+    padding-left: 10px;
+    padding-right: 50px;
     color: black;
     text-decoration: none;
     font-size: 17px;
@@ -195,9 +156,9 @@ loadExternal()
   margin-left: 5px;
   margin-bottom: 3px;
   border: solid black;
-  border-width: 0 2px 2px 0;
+  border-width: 0 1px 1px 0;
   display: inline-block;
-  padding: 2px;
+  padding: 3px;
    transform: rotate(45deg);
   -webkit-transform: rotate(45deg);
 }
@@ -207,19 +168,20 @@ loadExternal()
     height: 35px;
     border-bottom: 5px solid #01b4e4;
 }
-.mainMenuWrap{
-    height: 120px;
+.mainMenuWrapper{
     width: 100%;
+    height: 120px;
+    background: #0d253f;
     display: flex;
-    border-bottom: 1px solid lightgray; 
-    background: #0d253f; 
+    align-items: center;
+    justify-content: center;
 }
 .mainMenu{
-    height: 120px;
+    height: 90px;
     width: 1300px;
     display: flex;
-    margin: auto;
     align-items: center;
+
 }
 .slika img{
     height: 90px;
@@ -236,7 +198,6 @@ loadExternal()
 .info{
     margin-left: 15px;
 }
-
 .info a{
     color: lightgray;
     cursor: pointer;
@@ -244,7 +205,7 @@ loadExternal()
     font-weight: 600;
 }
 .info a:hover{
-    color:gray;
+    color:gray ;
 }
 .pageWrapper{
     width: 1300px;
@@ -283,13 +244,6 @@ loadExternal()
     border-top-left-radius: 8px;
     border-top-right-radius: 8px;
     align-self: flex-start;
-    justify-content: space-between;
-}
-.blueBox p{
-    margin-right: 20px;
-    font-size: 18px;
-    font-weight: 400;
-    color: white;
 }
 .blueBox h3{
     color: white;
@@ -363,6 +317,7 @@ loadExternal()
     flex-direction: row;
 }
 .translation .down{
+    padding: 10px;
     color: black;
 }
 .translations .up a{
@@ -379,64 +334,11 @@ loadExternal()
 .header a{
     font-size: 17px;
 }
-.info h1{
-    color: white;
-    text-decoration: none;
-    font-weight: 700;
-    
-}
 .info a{
     color: #01b4e4;
     text-decoration: none;
     font-weight: bold;
 
-}
-.down{
-    display: flex;
-    width:1000px;
-    flex-direction: column;
-    
-}
-.downDown {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-
-    border-bottom: 1px solid lightgray;
-}
-.downUp{
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    width: 500px;
-}
-.downUp a{
-    font-weight: bold;
-    padding: 10px;
-    margin: 0;
-}
-.downDown a{
-    padding: 10px;
-    margin: 0;
-}
-.downUpWrap{
-    height: 100%;
-    width: 100%;
-    border-bottom: 1px solid lightgray;
-}
-.no{
-    color: lightgray;
-    font-weight: bold;
-}
-.glavniNaslov{
-    display: flex;
-}
-.glavniNaslov p{
-    font-weight: 400;
-    font-size: 2.2em;
-    color: gray;
-    margin: 0;
-    margin-left: 5px;
 }
 .overlay {
   position: fixed; /* Sit on top of the page content */
@@ -452,8 +354,6 @@ loadExternal()
   cursor: pointer; /* Add a pointer on hover */
   align-items: center;
   justify-content: center;
-
-
 }
 .overlayVideo{
     display: flex;
